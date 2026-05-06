@@ -1,0 +1,1196 @@
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>키스톤/브릿지 TF 사업 weekly — 2026.05.06</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3349;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --highlight: rgba(79,142,247,0.18);
+    --highlight-border: rgba(79,142,247,0.6);
+    --text: #e2e6f3;
+    --text-muted: #7880a0;
+    --text-dim: #4a5070;
+    --tag-bg: #1e2540;
+    --radius: 10px;
+    --tab-h: 54px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 28px 36px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .dot { color: var(--text-dim); margin: 0 6px; }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 2px;
+  }
+  .tab-btn {
+    height: var(--tab-h);
+    padding: 0 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: -0.2px;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* ── Content ── */
+  .tab-content { display: none; padding: 36px; max-width: 900px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* ── Summary Tab ── */
+  .section {
+    margin-bottom: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 16px 22px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-num {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .section-body { padding: 18px 22px; }
+  .section-body p { color: var(--text); margin-bottom: 10px; }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  /* timestamp links */
+  .ts {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(79,142,247,0.1);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 5px;
+    padding: 1px 7px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    vertical-align: middle;
+    margin: 0 2px;
+  }
+  .ts:hover {
+    background: rgba(79,142,247,0.22);
+    border-color: rgba(79,142,247,0.5);
+  }
+  .ts::before { content: '▶'; font-size: 8px; opacity: 0.7; }
+
+  /* insight section */
+  .insight-grid { display: flex; flex-direction: column; gap: 14px; }
+  .insight-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+  }
+  .insight-title { font-weight: 700; color: var(--text); margin-bottom: 5px; font-size: 13px; }
+  .insight-body { color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+
+  /* bridge section */
+  .bridge-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid #f7a94f;
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .bridge-note strong { color: #f7a94f; }
+
+  /* ── Script Tab ── */
+  .script-search {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .script-search input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .script-search input:focus { border-color: var(--accent); }
+  .script-search .icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-dim); font-size: 14px;
+  }
+
+  .script-entries { display: flex; flex-direction: column; gap: 2px; }
+  .script-entry {
+    display: flex;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    scroll-margin-top: 130px;
+  }
+  .script-entry:hover { background: var(--surface); border-color: var(--border); }
+  .script-entry.highlighted {
+    background: var(--highlight);
+    border-color: var(--highlight-border);
+    animation: pulse 0.5s ease;
+  }
+  @keyframes pulse {
+    0% { background: rgba(79,142,247,0.35); }
+    100% { background: var(--highlight); }
+  }
+  .entry-ts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 42px;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .entry-speaker {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 60px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .entry-text { color: var(--text); font-size: 13px; line-height: 1.75; }
+
+  /* speaker colors */
+  .sp1 { color: #4f8ef7; }
+  .sp2 { color: #7c5cfc; }
+  .sp3 { color: #4fd1c5; }
+  .sp4 { color: #f6ad55; }
+  .sp5 { color: #fc8181; }
+  .sp6 { color: #68d391; }
+  .sp7 { color: #b794f4; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* confluence button */
+  .cf-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 14px;
+    background: #0052cc;
+    border: none; border-radius: 7px;
+    color: #fff; font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, opacity 0.15s;
+    margin-left: auto; flex-shrink: 0;
+  }
+  .cf-btn:hover { background: #0065ff; }
+  .cf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cf-btn svg { width: 14px; height: 14px; }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 20px;
+    font-size: 13px; color: var(--text);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 999; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+  .toast.success { border-color: #48bb78; color: #48bb78; }
+  .toast.error { border-color: #fc8181; color: #fc8181; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="header-top">
+    <span class="logo">키스톤/브릿지 TF</span>
+    <span class="meta">사업 weekly</span>
+    <span class="dot">·</span>
+    <span class="meta">2026.05.06 수</span>
+    <span class="dot">·</span>
+    <span class="meta">59분 9초</span>
+    <button class="cf-btn" id="ghBtn" onclick="uploadToGitHub()" style="background:#24292e;" disabled="">등록 중...</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary', this)">📋 요약</button>
+    <button class="tab-btn" onclick="switchTab('script', this)">📄 전체 스크립트</button>
+  </div>
+</header>
+
+<!-- ══════════════════ SUMMARY TAB ══════════════════ -->
+<div id="tab-summary" class="tab-content active">
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">초기 시장 접근 전략</div>
+    </div>
+    <div class="section-body">
+      <p>대형 건설 현장 위주로 논의해왔지만, 현장 소장 접근의 어려움이 반복적으로 언급됐습니다. <a class="ts" onclick="goTo('00:06')">00:06</a> 대형 건설사는 기존 인맥·신뢰 기반으로 돌아가기 때문에 외부 플랫폼이 파고들기 매우 어렵다는 결론에 이르렀습니다.</p>
+      <p><strong style="color:var(--text)">소규모 인테리어·리모델링 현장을 초기 시장으로 먼저 공략</strong>하는 방향으로 합의했습니다. <a class="ts" onclick="goTo('08:18')">08:18</a> <a class="ts" onclick="goTo('10:48')">10:48</a> 대형 시장은 플랫폼 내 데이터(리뷰·평점)가 충분히 쌓인 이후 단계적으로 접근하는 전략입니다.</p>
+      <p>서비스 스펙 자체는 소규모·대규모 현장 모두 업무 프로세스가 유사하게 설계되어 있어, 스펙 변경 없이 타겟 시장만 조정하는 방향입니다. <a class="ts" onclick="goTo('11:03')">11:03</a></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">인력 수급 채널 확보</div>
+    </div>
+    <div class="section-body">
+      <p>기능공·현장 소장 DB를 쌓기 위해 <strong style="color:var(--text)">인력 개발소(개미 인력 개발 등)와의 제휴</strong>를 핵심 채널로 잡았습니다. <a class="ts" onclick="goTo('00:57')">00:57</a> 개미 외에도 전국망이 있는 인력 사무소를 추가 리스트업하고 아웃바운드 컨택을 진행하기로 했습니다. <a class="ts" onclick="goTo('14:54')">14:54</a></p>
+      <p>팀장급 인력은 일다오 등 플랫폼에서 연락처를 확보해 직접 영업하는 방식을 병행합니다. <a class="ts" onclick="goTo('35:18')">35:18</a></p>
+      <p>인력 사무소가 굿 빌더를 경쟁자로 볼 수 있는 만큼, 제휴 시 그들에게 줄 수 있는 혜택(딜 전략)을 별도로 설계해야 합니다. <a class="ts" onclick="goTo('17:57')">17:57</a> <a class="ts" onclick="goTo('26:35')">26:35</a></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">수익 모델</div>
+    </div>
+    <div class="section-body">
+      <p>선정산·어음 할인 등 금융 연계 모델은 법적 리스크로 단기 적용이 어렵다고 결론 냈습니다. <a class="ts" onclick="goTo('23:30')">23:30</a> <a class="ts" onclick="goTo('24:00')">24:00</a></p>
+      <p>현 단계에서는 <strong style="color:var(--text)">구직자(기능공) 사이드에 이용권 과금</strong> (이력 하이라이팅, 매칭 우선권 등)을 우선 적용합니다. <a class="ts" onclick="goTo('46:19')">46:19</a></p>
+      <p>B2B(도급사·원청사) 과금은 플랫폼 DB가 충분히 쌓인 이후로 미루기로 했습니다. <a class="ts" onclick="goTo('47:13')">47:13</a> <a class="ts" onclick="goTo('50:12')">50:12</a> 유동성 모델(캐피탈 연계)은 별도 태핑해보기로 했습니다.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">런칭 전략</div>
+    </div>
+    <div class="section-body">
+      <p>런칭 시점에 일정 규모의 사용자가 미리 확보되어 있어야 한다는 의견이 강하게 제기됐습니다. <a class="ts" onclick="goTo('31:15')">31:15</a> <a class="ts" onclick="goTo('38:01')">38:01</a></p>
+      <p><strong style="color:var(--text)">사전 가입자 모집 → 런칭일 일괄 초대</strong> 형태로 설계하기로 했습니다. <a class="ts" onclick="goTo('38:19')">38:19</a></p>
+      <p>팀장급 등록 인센티브(1인당 약 5만 원), 전자계약 1년 무료 제공 등의 프로모션 방안이 거론됐습니다. <a class="ts" onclick="goTo('38:53')">38:53</a> <a class="ts" onclick="goTo('41:39')">41:39</a></p>
+      <p>출석 체크·매칭 포인트 등 앱 내 리텐션 설계도 함께 고민하기로 했습니다. <a class="ts" onclick="goTo('43:26')">43:26</a></p>
+    </div>
+  </div>
+
+  <div style="margin-bottom:36px;">
+    <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase;">💡 핵심 인사이트</div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-title">닭-달걀 구조가 핵심 과제</div>
+        <div class="insight-body">기능공은 현장 소장이 없으면 안 오고, 현장 소장은 기능공 풀이 없으면 안 씁니다. 인력 사무소를 매개로 이 구조를 푸는 접근이지만, 제휴 딜 전략을 별도 설계해야 합니다. <a class="ts" onclick="goTo('27:44')">27:44</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">건설 시장 디지털화 시도는 반복 실패해왔음</div>
+        <div class="insight-body">현장 소장이 쥔 오프라인 인맥(전화번호부)을 온라인으로 전환하지 못한 게 공통 실패 원인. 굿 빌더도 이 벽을 넘는 것이 핵심 과제입니다. <a class="ts" onclick="goTo('33:28')">33:28</a> <a class="ts" onclick="goTo('34:49')">34:49</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">초기엔 돈을 주고서라도 유저를 끌어들여야 함</div>
+        <div class="insight-body">플랫폼 특성상 양쪽이 동시에 모여야 가치가 생기기 때문에, 초반에는 인센티브 비용을 감수하고 공격적으로 모집하는 것이 불가피하다는 데 공감대가 형성됐습니다. <a class="ts" onclick="goTo('37:14')">37:14</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">B2B 과금은 나중 단계의 숙제</div>
+        <div class="insight-body">현장 소장·도급사는 지금은 오히려 돈을 주고 끌어들여야 할 대상. 이들에게 과금할 수 있는 시점은 플랫폼에 충분한 인력 풀이 쌓인 이후입니다. 투자자용 로드맵에서도 단계별 수익화 구조를 명확히 보여줘야 합니다. <a class="ts" onclick="goTo('48:43')">48:43</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:36px;">
+    <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase;">✅ 다음 회의 전 해야 할 일</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <div style="padding:11px 18px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--text);letter-spacing:0.3px;">🔨 공통</div>
+        <div style="padding:12px 18px;display:flex;flex-direction:column;gap:9px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">개미 외 전국망 인력 사무소 추가 리스트업 <a class="ts" onclick="goTo('14:33')">14:33</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">인력 사무소 대상 제휴 딜 전략 수립 <a class="ts" onclick="goTo('17:57')">17:57</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">팀장급 연락처 수집 및 아웃바운드 설계 (알바 고용 포함) <a class="ts" onclick="goTo('35:18')">35:18</a> <a class="ts" onclick="goTo('45:40')">45:40</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">사전 가입자 모집 → 런칭일 일괄 초대 설계 (5월 내 완료) <a class="ts" onclick="goTo('38:19')">38:19</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">구직자 사이드 상품 기획 (매칭 이용권·출석 포인트 컨셉) <a class="ts" onclick="goTo('45:54')">45:54</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:var(--accent);flex-shrink:0;"><span style="font-size:13px;color:var(--text);">캐피탈 연계 유동성 모델 네트워크 탐색 (김 이사님 문의) <a class="ts" onclick="goTo('47:13')">47:13</a></span></label>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #f7a94f;border-radius:var(--radius);overflow:hidden;">
+        <div style="padding:11px 18px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:#f7a94f;letter-spacing:0.3px;">🎓 브릿지 (대입 서비스)</div>
+        <div style="padding:12px 18px;display:flex;flex-direction:column;gap:9px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:#f7a94f;flex-shrink:0;"><span style="font-size:13px;color:var(--text);">서비스 이용 가이드 콘텐츠 정리 (생활기록부 등록 방법 등, 바이본 참고) <a class="ts" onclick="goTo('55:44')">55:44</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:#f7a94f;flex-shrink:0;"><span style="font-size:13px;color:var(--text);">알바 계약 연장 검토 (5월 말 → 6월 말) <a class="ts" onclick="goTo('57:10')">57:10</a></span></label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;"><input type="checkbox" style="margin-top:3px;accent-color:#f7a94f;flex-shrink:0;"><span style="font-size:13px;color:var(--text);">오늘 논의 내용 슬랙에 정리해서 공유 <a class="ts" onclick="goTo('57:54')">57:54</a></span></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bridge-note">
+    <strong>🎓 브릿지 (대입 서비스) — 회의 말미 약 2분</strong><br>
+    서비스 이용 가이드 콘텐츠 작업 요청 (생활기록부 등록 방법 등). 참고 사이트로 <strong>바이본</strong> 언급. 알바 고용 기간(5월 말) 및 연장 논의. <a class="ts" onclick="goTo('55:37')">55:37</a>
+  </div>
+
+</div>
+
+<!-- ══════════════════ SCRIPT TAB ══════════════════ -->
+<div id="tab-script" class="tab-content">
+  <div class="script-search">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="스크립트 내용 검색..." oninput="filterScript()">
+  </div>
+  <div class="script-entries" id="scriptEntries"><div class="script-entry" id="ts-00-00" data-ts="00:00">
+      <div class="entry-ts">00:00</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">되어 있는 것들에 대한 일정 같은 것들 좀 체크를 해야 될 것 같은데, 지금 키스톤(굿 빌더) 같은 경우에는 개미 인력 개발 그쪽이랑 미팅을 해야 할 것 같아요. 어쨌든 지금 저희가 타깃으로 잡는 게 현장 소장하고 기능공인데, 현장 소장 쪽은 저희가 움직일 수 있는 데에는 분명히 한계가 있어 보이거든요.</div>
+    </div><div class="script-entry" id="ts-00-57" data-ts="00:57">
+      <div class="entry-ts">00:57</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그러면 개미 인력 개발은 제가 남 상무님 통해서 연락을 하려고 했는데 계속 연락 못하셨다고 하네요. 오늘 중에 강사님과 말씀드려서 다음 미팅 전에 한번 미팅 일정을 조율하는 걸로 할게요.</div>
+    </div><div class="script-entry" id="ts-01-17" data-ts="01:17">
+      <div class="entry-ts">01:17</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">그게 좀 돼야 저희도 사실 아무리 머리를 굴려봐도 현장 소장을 컨택할 방법이 마땅치가 않더라고요. 결국에는 오프라인 영업을 통해서 풀든, 관계가 있는 쪽을 통해서 좀 뚫어야 될 것 같아요. 저희 예전에 건설인협회 쪽이랑 미팅을 하지 않았었나요?</div>
+    </div><div class="script-entry" id="ts-01-52" data-ts="01:52">
+      <div class="entry-ts">01:52</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">건설인 협회에 정원 팀장 아는 분 있나요?</div>
+    </div><div class="script-entry" id="ts-01-55" data-ts="01:55">
+      <div class="entry-ts">01:55</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">건설이 잡혀요. 저는 키스톤(굿 빌더)과 전혀 무관한 건인데, 가서 뭔가 설문 같은 거 하고 왔거든요. 작년에 문정순 이사님이 원래 담당이었던 건데 그때 없어지면서 제가 대신 가서요.</div>
+    </div><div class="script-entry" id="ts-02-13" data-ts="02:13">
+      <div class="entry-ts">02:13</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">이번에 굿 빌더 하면서 경영 전략 그때 서주현 이사가 관여했었잖아요.</div>
+    </div><div class="script-entry" id="ts-02-17" data-ts="02:17">
+      <div class="entry-ts">02:17</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">저도 그 기억이 나거든요. 그러니까 지금 어쨌든 현장 소장 쪽을 뚫어보려면 저희가 직접 하는 것보다는 개미 인력 개발이든 건설인 협회든 뭔가 이런 채널을 활용해야 할 것 같아요.</div>
+    </div><div class="script-entry" id="ts-02-31" data-ts="02:31">
+      <div class="entry-ts">02:31</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">건설 공제회 쪽에 들어달라고 하긴 했는데, 아예 못 들어온 것 같아요.</div>
+    </div><div class="script-entry" id="ts-02-41" data-ts="02:41">
+      <div class="entry-ts">02:41</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">데이터 수집 차원에서 공제회를 어떻게 만날 수 있냐 얘기했었고, 노무비 닷컴도 좀 불러달라고 했는데 아직 연락이 없어요.</div>
+    </div><div class="script-entry" id="ts-03-11" data-ts="03:11">
+      <div class="entry-ts">03:11</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">일단은 기능공 쪽은 어떻게든 온라인으로든 풀어볼 방법들을 계속 고민해 보고, 오픈 프로모션을 통해서라도 해볼 수 있을 것 같은데, 현장 소장 쪽은 저희가 직접 뚫기에는 제한적인 영역들이 많아서 그 부분들을 좀 한번 다시 체크해 봐 주시면 좋겠습니다.</div>
+    </div><div class="script-entry" id="ts-03-57" data-ts="03:57">
+      <div class="entry-ts">03:57</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">필드 일정은 아직 변화가 없어요.</div>
+    </div><div class="script-entry" id="ts-04-13" data-ts="04:13">
+      <div class="entry-ts">04:13</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">지난주에 서비스 리뷰는 굿 빌더도 했고, 필드도 브릿지도 다 리뷰한 상태입니다.</div>
+    </div><div class="script-entry" id="ts-04-26" data-ts="04:26">
+      <div class="entry-ts">04:26</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">브릿지는 이미 상품이 정해져 있는 상황이고, 히스토(굿 빌더) 쪽은 지금 BM을 제가 다시 보고 있는 중이에요. 자금 흐름 관련 버전은 사장님이 확인해 주신다고 하고서 아직 깜깜 무소식인 상태예요.</div>
+    </div><div class="script-entry" id="ts-05-01" data-ts="05:01">
+      <div class="entry-ts">05:01</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">재차 한번 얘기할 기회가 있어서 얘기를 했었는데, 사장님 시각은 쉽지 않아 보인다는 생각만 갖고 계시더라고요.</div>
+    </div><div class="script-entry" id="ts-05-13" data-ts="05:13">
+      <div class="entry-ts">05:13</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">박영미 이사도 예전에 비슷한 것들을 했었다고 하더라고요. 잠깐 논의를 했었는데, 실제 소액 대출해주는 업체랑 같이 껴서 했는데 스타트업들이 그것 때문에 부도 나고 하면서 실제 어음 부도율이 꽤 높았나 보더라고요.</div>
+    </div><div class="script-entry" id="ts-05-41" data-ts="05:41">
+      <div class="entry-ts">05:41</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">키움 캐피탈은 그런 건 안 하나요?</div>
+    </div><div class="script-entry" id="ts-05-46" data-ts="05:46">
+      <div class="entry-ts">05:46</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">뭐 하려면 검토는 할 수 있는데 아직 그런 거 안 해요. 그때 당시에는 파트너가 스타트업이었고, 지금 여기 하도급사나 원청사들은 이 업에서 오랫동안 이 역할을 해왔던 사람들이라 상황이 다르죠.</div>
+    </div><div class="script-entry" id="ts-06-04" data-ts="06:04">
+      <div class="entry-ts">06:04</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">지금 저희가 고민 중인 게, 굿 빌더에서 저희가 타깃으로 삼아야 하는 시장이 어디냐라는 고민이 있어요. 대형 건설 시장 위주로 얘기를 풀어왔었는데, 그 시장을 저희가 쉽게 뚫어 들어갈 수 있느냐라는 고민이 하나 있고, 오히려 소규모 건설 사업장이 될 수도 있겠다는 생각도 들어요.</div>
+    </div><div class="script-entry" id="ts-07-03" data-ts="07:03">
+      <div class="entry-ts">07:03</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">소규모 사업체는 별도 현장 소장이 따로 존재한다기보다는 반장이나 작업팀을 모집하는 쪽이 많아서, 인테리어 공사라든지 이런 소규모 사업체 쪽에 좀 더 니즈가 있지 않을까라는 생각도 드거든요.</div>
+    </div><div class="script-entry" id="ts-07-34" data-ts="07:34">
+      <div class="entry-ts">07:34</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">크게 나누면 어떻게 나눠야 하나요? 항상 아파트 건설 현장 같은 느낌으로 얘기를 들었는데요.</div>
+    </div><div class="script-entry" id="ts-07-43" data-ts="07:43">
+      <div class="entry-ts">07:43</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">저번에 가서 크게는 3개로 나눴어요. 하나는 토목, 그다음에 플랜트, 그다음에 일반 건설. 이 세 가지예요.</div>
+    </div><div class="script-entry" id="ts-08-06" data-ts="08:06">
+      <div class="entry-ts">08:06</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">지금까지 논의의 기반은 대규모 현장 기반으로 보통 얘기를 끌고 왔었는데, 진짜 대규모 현장에서 굿 빌더 서비스가 파고들어갈 구멍이 많이 있을까라고 생각해보니, 오히려 인테리어나 리모델링 소규모 현장에 기회가 더 많지 않을까라는 생각이 들기 시작해서요. 이 논의는 한 번도 해본 적이 없었거든요.</div>
+    </div><div class="script-entry" id="ts-08-18" data-ts="08:18">
+      <div class="entry-ts">08:18</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">공공은 아니고 민간 쪽에서, 사실 지금까지는 대규모 현장 기반으로 얘기를 끌고 왔었는데, 오히려 인테리어나 리모델링하는 소규모 현장에 기회가 더 많지 않을까라는 생각이 들기 시작해가지고, 이 논의는 한 번도 해본 적이 없었거든요.</div>
+    </div><div class="script-entry" id="ts-09-26" data-ts="09:26">
+      <div class="entry-ts">09:26</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">결국에는 초기 시장 접근인 거거든요. 모든 서비스가 초기 시장 접근은 어디로 하든 나중에 전체 시장을 타깃으로 넓혀가는 거긴 하지만, 저희가 최초의 접근을 좀 하려면 어쨌든 기능공이든 기능공 팀이든 이 사람들한테 '여기에 등록해 놓으니까 어쨌든 연락이 오더라'라는 경험을 줘야 해요.</div>
+    </div><div class="script-entry" id="ts-10-48" data-ts="10:48">
+      <div class="entry-ts">10:48</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">시장에 대한 접근 방향에 대한 합의는 한 번쯤은 하고 가야 될 것 같긴 해요. 그에 따라서 운영이나 마케팅에 대한 타겟도 많이 달라질 것 같거든요.</div>
+    </div><div class="script-entry" id="ts-11-03" data-ts="11:03">
+      <div class="entry-ts">11:03</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">지금 굿 빌더 개발 중인 스펙은 그냥 상수로 넣어야 될 것 같고요. 지금 와서 손댈 수는 없어요. 근데 그 스펙은 작은 현장이든 큰 현장이든 사실상 업무 프로세스는 유사하다라는 걸 기반으로 스터디도 하고 조사를 해서 만들어졌어요. 그러면 큰 기업들에 이걸 도입시키는 게 쉽냐, 아니면 작은 인테리어 쪽이 도입하기 쉽냐의 문제인 거죠.</div>
+    </div><div class="script-entry" id="ts-12-09" data-ts="12:09">
+      <div class="entry-ts">12:09</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">그렇다면 어쨌든 여기에서 팀들의 리뷰가 쌓이고 뭔가의 데이터가 축적이 돼야 나중에 저는 큰 시장을 올 수 있을 거라는 생각이 들거든요. 아무런 게 쌓여 있지 않은데 큰 기업들이 저희를 쓸 이유는 없어 보여서요.</div>
+    </div><div class="script-entry" id="ts-12-36" data-ts="12:36">
+      <div class="entry-ts">12:36</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">도급사 끼고 밑에 일용직이든 기능공들 써서 하는 시장이 굉장히 신뢰 기반의 프로세스를 갖고 있어요. 그렇기 때문에 웬만하면 믿는 사람들 중심으로 이걸 해나가고 있는데, 그러면 가벼운 공사, 규모가 작은 것부터 먼저 들어간다는 방향에 대해서는 다른 분들 이견 있으세요?</div>
+    </div><div class="script-entry" id="ts-13-30" data-ts="13:30">
+      <div class="entry-ts">13:30</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">큰 데는 들어가기 어렵다는 가설은 갖고 있었지만, 항상 논의는 그걸 위주로 해왔었긴 했었나 싶어요.</div>
+    </div><div class="script-entry" id="ts-14-09" data-ts="14:09">
+      <div class="entry-ts">14:09</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">제가 개미 인력 개발을 만나고 싶어 하는 이유는 그 일용직 노동자를 원하는 게 아니라, 현장 소장 쪽으로 연락이 오는 분들을 연결해보고 싶어서예요.</div>
+    </div><div class="script-entry" id="ts-14-19" data-ts="14:19">
+      <div class="entry-ts">14:19</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">마찬가지로, 그걸 DB화할 수 있으면 거기에다 마케팅 비용 엄청 쏟아부어도 돼요. 하나 등록할 때마다 인당 한 10만 원씩 줘도 돼요.</div>
+    </div><div class="script-entry" id="ts-14-29" data-ts="14:29">
+      <div class="entry-ts">14:29</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">오히려 어떤 사람들이 맞냐가 키 포인트가 될 수도 있겠어요.</div>
+    </div><div class="script-entry" id="ts-14-33" data-ts="14:33">
+      <div class="entry-ts">14:33</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그래서 인력 개발을 개미뿐만 아니라 몇 군데 더 좀 서칭을 해봅시다. 전국망이 있거나 여러 개 지점을 갖고 있는 곳들이 있으면 리스트업 해두고, 그거 다 만나봐야죠. 일단 개미는 제가 컨택해볼 테니까 나머지 리스트업 작업을 먼저 좀 합시다.</div>
+    </div><div class="script-entry" id="ts-15-44" data-ts="15:44">
+      <div class="entry-ts">15:44</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">일단은 그 기준으로 좀 고민이 디벨롭해보는 거죠.</div>
+    </div><div class="script-entry" id="ts-15-48" data-ts="15:48">
+      <div class="entry-ts">15:48</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">좋아요. 이거는 빨리 결정하고 가면 되는 문제인 것 같아요. 더 이상 여기에 대해서 고민할 필요는 없고.</div>
+    </div><div class="script-entry" id="ts-15-54" data-ts="15:54">
+      <div class="entry-ts">15:54</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">어쨌든 큰 시장 뚫는 거는 나중으로 두더라도, 일단은 접근이 가능한 시장 쪽으로 뚫는 방향으로. 바이럴 채널들도 큰 업체들 말고 네이버 카페 인테리어 카페라든지 이런 쪽을 주도적으로 좀 건드려보는 형태로 가야 할 것 같아요.</div>
+    </div><div class="script-entry" id="ts-16-26" data-ts="16:26">
+      <div class="entry-ts">16:26</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">도급사 쪽에 현장 소장이라든지 일하는 애들이 결국 중간에 허브 역할을 해서 모이는 곳은 인력 개발 인력 사무소가 지금 거의 절대적일 것 같은데, 다른 곳들 중에서도 이런 것들이 있을까요?</div>
+    </div><div class="script-entry" id="ts-16-46" data-ts="16:46">
+      <div class="entry-ts">16:46</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">지난번에 얘기했듯이 전화번호 리스트를 갖고 있는 거잖아요. 그런 리스트를 모아놓는 곳을요.</div>
+    </div><div class="script-entry" id="ts-17-08" data-ts="17:08">
+      <div class="entry-ts">17:08</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">전화번호부에 있는 걸 굿 빌더로 옮기는 작업을 위해서 굿 빌더에 그 기능이 일단 탑재가 되고 있고, 두 번째로 전화번호부에 없는 사람은 현재 기준으로 인력 개발 인력 사무소에 연락할 것 같거든요. 전국에 있는 인력 개발 중개 사무소를 최대한 많이 리스트업하고 이쪽에 컨택해 본다, 그게 저는 가장 직접적인 방법일 것 같아요.</div>
+    </div><div class="script-entry" id="ts-17-45" data-ts="17:45">
+      <div class="entry-ts">17:45</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">그건 좀 준비를 해봐야 될 것 같아요. 인력 개발 업체들은 기본적으로 저희에 대한 호의적이지 않은 반응들이 좀 있긴 해서요.</div>
+    </div><div class="script-entry" id="ts-17-57" data-ts="17:57">
+      <div class="entry-ts">17:57</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그치. 그래서 상생안을 고민을 해야 되는데, 굿 빌더가 나왔을 때 얘네가 굿 빌더를 이용해서 자기 비즈니스에 좀 더 도움되게끔 하는 방법이 뭐가 있느냐, 그거를 좀 들어서 나중에 필요하면 굿 빌더에 인력 사무소에 대한 계정 권한 같은 것들이 좀 있어야 될 수도 있어요.</div>
+    </div><div class="script-entry" id="ts-18-25" data-ts="18:25">
+      <div class="entry-ts">18:25</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">근데 그때 사장님은 그거 되게 부정적이셨던 것 같아요. 인력을 우리가 대체하는 거지, 걔네가 우리를 쓰는 거에 대해서는요.</div>
+    </div><div class="script-entry" id="ts-18-43" data-ts="18:43">
+      <div class="entry-ts">18:43</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">저도 인력 개발 사무소가 우리를 쓰게 하는 것들이 목표는 아닌 것 같고, 어쨌든 걔네들도 건설 관련된 업체다 보니까 알고 있는 기능공 인력들은 있을 거고, 현장 소장이나 일을 주는 사람들을 연결시켜주는 대가를 우리가 걔네들한테 지불해야 하는 거고, 걔네들이 우리 안에 들어와서 뭔가 액션을 하는 건 아닌 거 같아요.</div>
+    </div><div class="script-entry" id="ts-19-37" data-ts="19:37">
+      <div class="entry-ts">19:37</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">건축 발주를 하면 도면부터 시작해서 설계사무소가 선정되는 과정이 있잖아요. 건축 시공 회사를 선정할 때는 또 따로인가요?</div>
+    </div><div class="script-entry" id="ts-19-52" data-ts="19:52">
+      <div class="entry-ts">19:52</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">완전 따로예요. 설계는 따로 하고, 그 도면 가지고 이제 입찰을 만나요.</div>
+    </div><div class="script-entry" id="ts-21-10" data-ts="21:10">
+      <div class="entry-ts">21:10</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">설계사무소들이 사실은 자기랑 일했었던 업체들을 연결해서 소개나 이런 것들을 할 수 있는 거죠.</div>
+    </div><div class="script-entry" id="ts-21-41" data-ts="21:41">
+      <div class="entry-ts">21:41</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">지방에 약간 빌라 짓는 지방 건설사들 있잖아요. 이 건설사 사장은 현장 소장이에요. 사장이 다 겸직하는 거죠. 거의 1인 아닌가요?</div>
+    </div><div class="script-entry" id="ts-22-10" data-ts="22:10">
+      <div class="entry-ts">22:10</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">규모가 크든 작든 그 역할은 무조건 존재하죠. 대표가 같이 하든 아니든, 회사 상황에 따라 다를 거고요.</div>
+    </div><div class="script-entry" id="ts-22-25" data-ts="22:25">
+      <div class="entry-ts">22:25</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그러면 팀장님 쪽에서 인력 사무소가 우리 굿 빌더 서비스를 이용할 수밖에 없는 이유를, 이용해야만 하는 이유를 좀 만들어보는 건 어떨까요?</div>
+    </div><div class="script-entry" id="ts-22-42" data-ts="22:42">
+      <div class="entry-ts">22:42</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">서비스는 정해졌다고 하셔서, 지금 스펙이 아예 정해진 거잖아요. 건설 업체들이 저희를 써야만 하는 이유가 거의 필사 수준이어야 될 것 같은데, 그런 게 지금 없더라고요. 서비스 상에서는요.</div>
+    </div><div class="script-entry" id="ts-23-02" data-ts="23:02">
+      <div class="entry-ts">23:02</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">반드시 써야 하는 건 아무 데도 없지요. 그걸 갖다가 장점이 있는 거지, 반드시 써야 되는 게 아니라 법적으로 제공되는 경우를 제외하고는요.</div>
+    </div><div class="script-entry" id="ts-23-09" data-ts="23:09">
+      <div class="entry-ts">23:09</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">현장에서 돌아가는 일에 업무 로드를 가급적이면 많이 줄여줄 수 있는 기능들을 담고는 있어요.</div>
+    </div><div class="script-entry" id="ts-23-16" data-ts="23:16">
+      <div class="entry-ts">23:16</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그건 봤는데, 예를 들어서 키움에서 해가지고 선정산을 태운다든가, 그게 키 포인트였는데 지금 저희 기능이 빠져 있잖아요.</div>
+    </div><div class="script-entry" id="ts-23-30" data-ts="23:30">
+      <div class="entry-ts">23:30</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">그건 법적으로 안 된다니까요.</div>
+    </div><div class="script-entry" id="ts-24-00" data-ts="24:00">
+      <div class="entry-ts">24:00</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">우리도 계속 돈에 대한 걸 얘기를 했는데, 결국 그거는 언제 다칠지 모르는 부분이기 때문에, 그래서 선지급은 하기가 힘들어요. 그래서 그때 얘기 대신 나온 게 대출 모델인 거잖아요. 대출 모델은 이제 키움이랑 얘기를 해서 개인 신용대출을 할 수 있냐인데, 그것도 사실 리스크 똑같이 있죠.</div>
+    </div><div class="script-entry" id="ts-24-59" data-ts="24:59">
+      <div class="entry-ts">24:59</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">이제 예전에 얘기했던 건 개인이 아니고 기업 어음 할인하는 방식이었어요.</div>
+    </div><div class="script-entry" id="ts-25-16" data-ts="25:16">
+      <div class="entry-ts">25:16</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">어음 할인을 하는 업체, 제2금융권들은 되게 많아요. 우리가 어느 정도 부담을 지느냐에 따라 좀 달라질 것 같아요.</div>
+    </div><div class="script-entry" id="ts-25-31" data-ts="25:31">
+      <div class="entry-ts">25:31</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">가다(GADA)가 아까 보면 사실상 인력 사무소 역할을 하면서 하고 있잖아요. 그 말은 뭐냐 하면 겉으로는 인력 사무소인데, 그들이 업무에 활용하고 있는 백오피스 시스템을 가다 서비스를 쓰고 있는 거겠죠 사실상.</div>
+    </div><div class="script-entry" id="ts-26-35" data-ts="26:35">
+      <div class="entry-ts">26:35</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">개미처럼 전국망이 있는 인력 개발 업체들에 우리가 제공해 준 이 서비스를 쓰게끔 해주겠다. 근데 그 제안이 하나의 업체가 아니라 여러 개가 필요한 게, 너네 이거 안 들어오면 우리는 얘네랑 할 거야라고 할 수 있을 정도의 협상을 하면서 걔네들을 끌고 와서, 너네 일자리 들어오면 아침에 생각해 보는 거죠.</div>
+    </div><div class="script-entry" id="ts-27-11" data-ts="27:11">
+      <div class="entry-ts">27:11</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">딱 들어왔을 때 아침에 우리는 전부 다 이거 굿 빌더 가입하세요. 걔네들 굿 빌더 통해가지고 급여라든지 공수라든지 이런 거 관리하게끔 하고 앞으로 이거 통해서 연결합니다. 그러면 이제 걔네들 입장에서는 굿 빌더 들어가고 나면 얘네들이 자기네끼리 다 매칭돼서 하면 우리는 돈 어떻게 벌어라는 고민이 들 거잖아요.</div>
+    </div><div class="script-entry" id="ts-27-44" data-ts="27:44">
+      <div class="entry-ts">27:44</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그러니까 저도 그래서 여기서 논의를 하기 시작한 거예요. 느낌은 숨고가 청소 업체를 대체했던 거랑 똑같거든요. 그러면은 건설 수주가 많이 있어야 되고, 일단 깔려 있어야 되고. 지금은 양쪽에 아무것도 없는 거잖아요. 카페를 차렸는데 여자 고객을 모집하면 남자 고객이 들어오는데, 아무것도 없는 여자 고객이 와야 되는 이유는 없는 거잖아요.</div>
+    </div><div class="script-entry" id="ts-28-42" data-ts="28:42">
+      <div class="entry-ts">28:42</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">지금 우리가 하는 거는 공수 관리, 그게 지금 그 핵심 키워드예요.</div>
+    </div><div class="script-entry" id="ts-28-47" data-ts="28:47">
+      <div class="entry-ts">28:47</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그러니까요. 예를 들어서 공수 관리가 핵심 키워드면은 중대재해처벌법을 면피를 해준다든가, 안전모 찍고 올리면 다 진짜 이거 쓰면 안전해라든가, 이런 워딩이 있어야 되는데, 우리의 슬로건 같은 게 있어야 되는데, 그게 뭔지를 모르겠는 거예요.</div>
+    </div><div class="script-entry" id="ts-29-02" data-ts="29:02">
+      <div class="entry-ts">29:02</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">하도급 업체 입장에서는 기존에 다 서류 작업하던 걸, 플랫폼으로 작업자가 들어오면 작업자들이 자동으로 디지털에서 출근 체크를 한다든지 서류 작성을 한다든지 하면은 내가 할 일을 걔네에게 시킬 수 있는 거죠. 그런 공수 관리나 이런 작업들을 작업자들을 플랫폼으로 끌어들인 다음 내가 편하게 할 수 있다는 거예요.</div>
+    </div><div class="script-entry" id="ts-30-46" data-ts="30:46">
+      <div class="entry-ts">30:46</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">저희는 그래서 일단은 이 플랫폼을 쓰는 이유는, 공수 관리를 하도급자 입장에서 편리하게 하고, 작업자 입장에서는 개인적인 공수도 관리하면서 하도급사랑 연계된 걸 여기서 편리하게 관리할 수 있다는 게 지금 보는 거고요. 그래서 이걸 끌어들이는 이유는 이제 그 관리 기능을 공짜로 제공하겠다는 거고, 그렇게 돼서 양쪽에서 모이면 그 안에서 저희가 매칭을 일으켜주고 거기서 돈을 받자가 지금의 우리의 로직이에요.</div>
+    </div><div class="script-entry" id="ts-31-15" data-ts="31:15">
+      <div class="entry-ts">31:15</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그게 익숙해져 있으면 어떡하지가 일단 하나가 있고요. 과거 경험상으로는 런칭할 때 이미 깔려 있어야 되거든요. 업체도 몇 개 있어야 되고 사람도 있어야 되고, 근데 지금 만약에 드문드문 몇 개 정도 이렇게 해가지고 런칭하면 망할 것 같고요.</div>
+    </div><div class="script-entry" id="ts-32-13" data-ts="32:13">
+      <div class="entry-ts">32:13</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">이 시장에서는 팀장이 작업자들 퍼센테이지로 가져오잖아요. 이걸 좀 정산 대시보드에서 소득세를 좀 줄여줄 수 있게 한다든가 그런 것들이 좀 있어야 되는 거 아닐까요?</div>
+    </div><div class="script-entry" id="ts-32-24" data-ts="32:24">
+      <div class="entry-ts">32:24</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">돈에 대한 건 우리가 들어가기가 힘들어요. 건드리면 이게 법이랑 좀 문제가 생겨서, 돈에 대한 건 우리가 건드리는 걸 포기했어요.</div>
+    </div><div class="script-entry" id="ts-33-03" data-ts="33:03">
+      <div class="entry-ts">33:03</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그러면 남은 거는 급부인 것 같아요. 기능공들은 단시간 대체가 안 될 거고, 잡부들부터 시작해서 지금 당장 내일부터 안 나온다고 한다면요.</div>
+    </div><div class="script-entry" id="ts-33-28" data-ts="33:28">
+      <div class="entry-ts">33:28</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">지금 우려하는 바나 걱정하는 바가 뭔지는 알고 있는데, 지금 그거를 지금 거기가 다 블랙박스인 것 같아요. 어떤 게 진짜 페인 포인트고 어떤 걸 해결해 줘야 누군가가 들어올 거고. 지금 현재 건설 시장은 다 페이퍼 위주의 되게 손이 많이 가는 형태로 업무를 하고 있는 상태이고, 많은 업체들에서 디지털화에 도전을 했다가 판판이 깨져 나갔던 게 지금까지의 상황이에요.</div>
+    </div><div class="script-entry" id="ts-34-11" data-ts="34:11">
+      <div class="entry-ts">34:11</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">가다는 자연스럽게 쓴 건 아니죠.</div>
+    </div><div class="script-entry" id="ts-34-17" data-ts="34:17">
+      <div class="entry-ts">34:17</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">가다는 현대산업개발이 관련돼 있어요.</div>
+    </div><div class="script-entry" id="ts-34-18" data-ts="34:18">
+      <div class="entry-ts">34:18</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">현대산업개발에서 자회사 스타트업으로 출발한 거고, 가다 자체도 그냥 인력을 채용하기 위한 플랫폼인 것뿐이고, 거기에서 근무하는 사람들을 인력 관리하거나 이런 쪽의 서비스들은 아니에요.</div>
+    </div><div class="script-entry" id="ts-34-49" data-ts="34:49">
+      <div class="entry-ts">34:49</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">기존에 디지털화를 하려고 했는데 실패한 사람들은 어떻게 해서 실패한 건지, 그 페인 포인트를 알 수 있을까요?</div>
+    </div><div class="script-entry" id="ts-34-49" data-ts="34:49">
+      <div class="entry-ts">34:49</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">지금 가다도 일용직 시장을 못 벗어나고 있는 이유 중에 하나가, 결국은 현장 소장이 갖고 있는 그 폰 안에 있는 데이터를 온라인으로 끌어모으지 못했어서 실패를 한 건 맞죠.</div>
+    </div><div class="script-entry" id="ts-35-18" data-ts="35:18">
+      <div class="entry-ts">35:18</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">일단 여기 일다오에 보면 다 리스트 있잖아요. 전화번호도 있고, 이거 다 아웃바운드 해야죠.</div>
+    </div><div class="script-entry" id="ts-35-52" data-ts="35:52">
+      <div class="entry-ts">35:52</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그래서 얘네들한테 다 컨택해서 이런 서비스를 출시하는데 이번에 한 번 가입해오면 프로모션으로 팀원들을 관리할 수 있는 이런 것까지 다 우리가 제공된다고 하면서 들어오시면 혜택 주고 있으니까 지금 써보셔라. 이거는 무조건 가야 되는 기능이고요.</div>
+    </div><div class="script-entry" id="ts-37-14" data-ts="37:14">
+      <div class="entry-ts">37:14</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그래서 당신들이 정말 불가피하게 해야 되는 업무에 있어서는 우리가 편하게 만들어 줄게가 이 컨셉인 거고, 두 번째는 팀장급 여기서 계속 아웃바운드 하는 전략. 하도급사는 인력 사무소에 보면 하도급사들 리스트 다 있을 것 같아요. 그 사람들한테 한 명 한 명 회원 가입시키면 5만 원씩 줄게, 예를 들면 막 그런 거라도 해야 된다는 거죠.</div>
+    </div><div class="script-entry" id="ts-37-50" data-ts="37:50">
+      <div class="entry-ts">37:50</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그럼 남은 건 양이네요. 기능공 양이랑 소장들 양, 이거밖에 안 남는 거예요.</div>
+    </div><div class="script-entry" id="ts-38-01" data-ts="38:01">
+      <div class="entry-ts">38:01</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그렇지, 일단 걔네들 먼저 모이기 시작하면요.</div>
+    </div><div class="script-entry" id="ts-38-05" data-ts="38:05">
+      <div class="entry-ts">38:05</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">하는 게 아니라 런칭할 때 모이고 있어야죠. 지금 상황에서요.</div>
+    </div><div class="script-entry" id="ts-38-19" data-ts="38:19">
+      <div class="entry-ts">38:19</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">사전 신청을 따로 받던, 그러면 우리가 나중에 일괄 초대 메시지 보내가지고 쫙 들어오게끔 할 수도 있고, 그런 게 필요해요. 그 설계가 사실 우리가 맨날 그동안 잘 못 해왔거든요. 이번에는 그거를 시간을 두고 5월 달 안에는 마무리해야 될 것 같아요.</div>
+    </div><div class="script-entry" id="ts-38-53" data-ts="38:53">
+      <div class="entry-ts">38:53</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">그 이야기, 그리고 전자계약이 지금 보니까 수수료가 거의 건당 천 원이더라고요. 계속 무료로 쓸 수는 없을 것 같아요. 그래서 한시적으로 뭔가 무료화하는 거를 좀 어필할 수도 있어요.</div>
+    </div><div class="script-entry" id="ts-40-12" data-ts="40:12">
+      <div class="entry-ts">40:12</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">근데 약간 느낌이, 야 이거 시작하는데 이때 우리 참여해야 돼, 참여 안 하면은 도태되거나 우리 뒤처질 것 같아라는 느낌이 들게끔 앞단에 뭔가 빌드업이 있어야 될 것 같고, 들어오고 나서는 초기에는 아마 그런 비용들은 무조건 쓸 수밖에 없을 거예요. 여기 일다오 기준으로만 보면 전문팀 2500팀 인재 정보 11만 6천이거든요.</div>
+    </div><div class="script-entry" id="ts-41-39" data-ts="41:39">
+      <div class="entry-ts">41:39</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">10만 원 준다 하면요. 그게 10만 원 너무 크고, 한 5만 원 정도 주면은 줄 서 있지 않을까요?</div>
+    </div><div class="script-entry" id="ts-41-46" data-ts="41:46">
+      <div class="entry-ts">41:46</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">초반에 그래서 그걸 원래 하려고 했어요. 원래 초반에 팀장들 모아서 팀 회식비 지원해 준다, 이런 식으로 해가지고 10명 등록하면 이런 식으로요.</div>
+    </div><div class="script-entry" id="ts-42-34" data-ts="42:34">
+      <div class="entry-ts">42:34</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그리고 굿 빌더 예전에 상품 아이디어 고민하다가 생각해 본 거는, 요즘에 알바 천국에서 상품 제일 잘 팔리는 애도 그렇고, 결국 뭐냐면 시간을 가지고 장난치는 상품들 있잖아요. 나는 지금 올려야 되는데 24시간 후에 올라가. 그러니까 내가 돈 더 내고 지금 올리고. 저희도 나중에 상품도 좀 생각해볼 문제가, 기본적으로 일주일에 한 번 정도는 그냥 매칭하는 것까지 할 수 있고, 근데 더 빨리 매칭하려면 좀 더 필요한 거야.</div>
+    </div><div class="script-entry" id="ts-43-26" data-ts="43:26">
+      <div class="entry-ts">43:26</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">출석 체크 같은 거 있잖아요. 앱에 들어가서 출석 체크했을 때 이 사람들에게 일주일 동안 출석 체크하면 예를 들면 매칭 포인트 2개를 준다든지, 이런 식의 어떤 설계들이 나중에 서비스에 같이 반영이 돼야 되지 않을까라는 생각은 좀 하고 있어요.</div>
+    </div><div class="script-entry" id="ts-44-04" data-ts="44:04">
+      <div class="entry-ts">44:04</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">일단은 굿 빌더는 어쨌든 제휴에서 만날 수 있는 업체들은 최대한 커피 만나보고, 저희 입장에서는 일단은 최대한 팀장·기능공 팀장에 대한 연락처를 최대한 확보해서 그거를 어떻게 그들한테 미리 서비스 홍보를 돌리고 유입을 시킬지에 대한 방안을 짜는 게 지금은 우리로서는 현재 첫 단계인 것 같긴 해요.</div>
+    </div><div class="script-entry" id="ts-44-37" data-ts="44:37">
+      <div class="entry-ts">44:37</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그러면 실장님 정리를 하면, 현장 소장이나 도급사 일용직 기능공은 이 매개가 되는 곳은 인력 사무소다. 그럼 인력 사무소는 첫 번째 작업은 리스트업 다 찾고, 두 번째 작업은 그 리스트업된 인력 사무소와 우리가 딜을 하기 위한 전략을 수립해야 될 것 같고, 두 번째는 팀장 직급이라든지, 여기 개인들도 전화번호 다 있나요 일다오에?</div>
+    </div><div class="script-entry" id="ts-45-27" data-ts="45:27">
+      <div class="entry-ts">45:27</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">연락처가 수집되는 애들은 따로 다 리스트업해가지고, 걔네는 결국 아웃바운드로 우리가 설득하는데, 이때도 마찬가지로 걔네들 설득할 때 어떤 베네핏을 줄 거냐. 요 흐름으로 일단은 설계가 좀 돼야 될 것 같아요.</div>
+    </div><div class="script-entry" id="ts-45-40" data-ts="45:40">
+      <div class="entry-ts">45:40</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">강하면 그렇게 설계하고, 실제 아웃바운드 콜 돌리는 거 우리가 직접 하기가 좀 어려울 거니까, 그거는 알바를 고용해서 하든 방법을 좀 찾긴 해야 될 것 같아요.</div>
+    </div><div class="script-entry" id="ts-45-54" data-ts="45:54">
+      <div class="entry-ts">45:54</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그리고 이거와 동시에 상품 말씀드렸던 아이디어로는 하나 그 컨셉으로는 하나 고민을 해봤으면 좋겠어요. 아무리 내가 생각을 해봐도 얘네한테 뭔가 수당을 가로채는 느낌은 안 좋고, 우리가 매칭을 시켜주는데 니가 돈을 더 내면은 더 빨리 매칭을 빨리 할 수 있는 이용권들이 주어져, 예를 들어 이런 형태여야 될 것 같아요.</div>
+    </div><div class="script-entry" id="ts-46-19" data-ts="46:19">
+      <div class="entry-ts">46:19</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">저는 지난주에도 얘기했지만 결국에는 이력서 하이라이트처럼 이용권을 결제를 하면 니가 더 많은 횟수에 추천이 돼, 이런 형태로요.</div>
+    </div><div class="script-entry" id="ts-47-13" data-ts="47:13">
+      <div class="entry-ts">47:13</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">도급사나 원청사 이쪽 애들은 쉽지는 않겠지만, 아까 우리 캐피탈을 활용한 유동성 모델이 있잖아요. 그거 태핑만 해봅시다.</div>
+    </div><div class="script-entry" id="ts-48-04" data-ts="48:04">
+      <div class="entry-ts">48:04</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">이거는 김 이사님이 네트워킹에 좀 가지고 있을 수도 있을 것 같은데, 제가 한번 다시 여쭤볼게요.</div>
+    </div><div class="script-entry" id="ts-48-08" data-ts="48:08">
+      <div class="entry-ts">48:08</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그쪽에 한번 물어봐 주시고. B2C는 일단은 아까 그런 상품으로 가고, B2B 쪽은 일단은 금융 모델 검토하는 걸로 하시고요. 비투비는 지금 현장 정보 등록해가지고 이렇게 이렇게 쓰는 것만 해도 그 사람들한테 우리는 땡큐인데, 굳이 뭐 돈 내고 쓰라고 할 수 있는 그게 없을 것 같아요.</div>
+    </div><div class="script-entry" id="ts-48-24" data-ts="48:24">
+      <div class="entry-ts">48:24</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">그게 제일 쉽지가 않지요. 근데 숙제이기도 하고, 왜냐하면 개인만으로는 이게 볼륨이 잘 안 올라올 거라서요.</div>
+    </div><div class="script-entry" id="ts-48-30" data-ts="48:30">
+      <div class="entry-ts">48:30</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">그러니까 결국엔 스텝인 거죠. BM이 확장되는 모델이라고 봐야 되는 거죠.</div>
+    </div><div class="script-entry" id="ts-48-43" data-ts="48:43">
+      <div class="entry-ts">48:43</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">하나 이게 로드맵에서 숫자가 창의적인 게 보여야 투자가. 일단 1단계에서 얼마 안 되더라도 3단계까지 가면 이게 커진다는 걸 보여줘야 돼요.</div>
+    </div><div class="script-entry" id="ts-49-00" data-ts="49:00">
+      <div class="entry-ts">49:00</div>
+      <div class="entry-speaker sp5">참석자 5</div>
+      <div class="entry-text">건설 임금 노무비가 크긴 한데, 빨대 꽂을 방법이 없는 거 아니에요?</div>
+    </div><div class="script-entry" id="ts-49-47" data-ts="49:47">
+      <div class="entry-ts">49:47</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">거기는 이런 식이죠.</div>
+    </div><div class="script-entry" id="ts-50-12" data-ts="50:12">
+      <div class="entry-ts">50:12</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그러면 시나리오상 B2B가 어느 정도 확보가 되고 이제 서비스가 돌아가고 있다고 치고, 그러면 얘네들한테 어떤 모델로 돈을 받을 거냐를 미리 고민하는 거는 의미는 있죠.</div>
+    </div><div class="script-entry" id="ts-51-07" data-ts="51:07">
+      <div class="entry-ts">51:07</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">실제 시공사 건설팀이나 이런 것들이 여기에 저희가 기능 팀들이 다 모여 있고 평판들이 어느 정도 쌓여 있으면, 나중에는 어쨌든 인테리어 업자든 아니면 소규모 시공 건설 설계 업체든 이런 애들이 이쪽에 들어와서 실제 시공할 수 있는 팀들을 찾는 형태로까지 하면서 걔네들한테 발주를 이미 안에서 내는 형태로까지 확장할 수도 있어요. 그럼 그 안에서 저희가 수수료를 받거나 이럴 수 있는 여지들이 있죠. 결국엔 일종의 입찰과 낙찰을 저희 플랫폼 안에서 구현을 하게 되는 거죠.</div>
+    </div><div class="script-entry" id="ts-52-01" data-ts="52:01">
+      <div class="entry-ts">52:01</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">네, 숨고, 오늘의 집 이런 유는 뭘로 돈 받냐면요. 거기는 지금 청소를 반드시 하고 싶은 사람이 있잖아요. 그 사람이 청소받고 싶다고 올리면 업체들이 그 사람한테 연락 메시지 때릴 때 돈을 내는 거예요.</div>
+    </div><div class="script-entry" id="ts-52-20" data-ts="52:20">
+      <div class="entry-ts">52:20</div>
+      <div class="entry-speaker sp4">참석자 4</div>
+      <div class="entry-text">친구도 예전에 내가 진짜 초창기에 만났었는데, 걔네들 무슨 전시회나 그런 거 있잖아요. 업계 관련 행사들 그런 데에 무조건 부스가 됐건 됐건 간에 가가지고 계속 홍보하고 자기네 가입해달라고 하고 그 활동을 엄청 하더라고요. 그렇게 막 하더니 한 1~2년 후에 많이 커졌어.</div>
+    </div><div class="script-entry" id="ts-53-07" data-ts="53:07">
+      <div class="entry-ts">53:07</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">이거 하도급이나 이런데 그런 니즈들이 있을까요? 우리가 쉽게 말해서 온라인 인력 중개 사업 서비스다라고 자리매김을 하면, 우리 개미가 됐건 인력 개발하는 애들이 사실상 일단 매니저 같은 역할이 있을 수 있고, 우리한테 의뢰가 오는 거예요. 어떤 현장에 대규모 반도체가 됐건 뭔가 여러 가지 일들이 생길 거잖아요. 그럼 우리가 걔네들하고 먼저 그럼 너네 필요한 인력들을 우리가 특정 기간 동안은 우리한테 얘기만 하면 우리가 다 보내줄게.</div>
+    </div><div class="script-entry" id="ts-54-00" data-ts="54:00">
+      <div class="entry-ts">54:00</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">워킹을 하려면은 가장 아까 처음에 말씀하신 것처럼 하자나 이런 문제가 발생을 했을 때에 대한 처리 프로세스가 내부에 필요해요. 걔네들이 그냥 온라인에서 잘 모르는 아무나 데리고 안 쓰려는 가장 큰 이유가, 내가 사람을 썼는데 이게 공사가 제대로 워킹하지 않았을 때 이걸 어떻게 하느냐, 하자 보수는 누가 어떤 비용을 들여서 할 것이냐, 내가 아는 팀을 썼으면 걔네들한테 욕을 하고 니네가 와서 일을 해라라고 하면 되지만요.</div>
+    </div><div class="script-entry" id="ts-54-55" data-ts="54:55">
+      <div class="entry-ts">54:55</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">그럴 수 있는데, 지금 어쨌든 저희가 바라보는 시장은 단순 노무는 아니다 보니까요.</div>
+    </div><div class="script-entry" id="ts-55-00" data-ts="55:00">
+      <div class="entry-ts">55:00</div>
+      <div class="entry-speaker sp6">참석자 6</div>
+      <div class="entry-text">그러면 인력 사무소가 아니라 인력개발원이랑 해야 되는 거 아닐까요? 지금 보니까 일다오가 한 180개 교육기관이랑 제휴를 한 것 같은데, 그러니까 개발해서 취업하겠다는 니즈가 있는 사람들을 바로 현장에 꽂는 역할을 해야 되는 건가요?</div>
+    </div><div class="script-entry" id="ts-55-24" data-ts="55:24">
+      <div class="entry-ts">55:24</div>
+      <div class="entry-speaker sp1">참석자 1</div>
+      <div class="entry-text">이거 좀 고민이 더 필요한 내용이긴 해요.</div>
+    </div><div class="script-entry" id="ts-55-27" data-ts="55:27">
+      <div class="entry-ts">55:27</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">일단 그 부분 추가로 고민을 하시고, 브릿지는 오늘 더 논의할 내용이 있나요?</div>
+    </div><div class="script-entry" id="ts-55-37" data-ts="55:37">
+      <div class="entry-ts">55:37</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">운영 관련해서 요청드릴 거 있어서요.</div>
+    </div><div class="script-entry" id="ts-55-44" data-ts="55:44">
+      <div class="entry-ts">55:44</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">운영이 이제 활성화도 활성화인데, 얘를 이제 돌리는 것도 운영이잖아요. 저희가 지금 필요한 것 중에 하나가 서비스 이용 가이드 콘텐츠 작업이 좀 필요해요. 예를 들어서 생활기록부 넣는 방법, 컨설팅에 대한 방법 이런 것들이 좀 작성이 돼 있고 얘를 개발하는 거는 다른 문제니까, 이 콘텐츠 정리가 먼저 필요한데요.</div>
+    </div><div class="script-entry" id="ts-56-15" data-ts="56:15">
+      <div class="entry-ts">56:15</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그리고 이번에 알바 3명 뽑았잖아요. 그리고 2명 더 뽑을 거지요. 그러면 그 5명의 역할은 어떤 역할을 한다라고 딱 계약서에 명시돼 있나요?</div>
+    </div><div class="script-entry" id="ts-56-23" data-ts="56:23">
+      <div class="entry-ts">56:23</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">계약서에 제가 계약서를 들여다보진 않았는데, 제가 요청하는 거는 데이터를 수집하고 검증한다는 거예요.</div>
+    </div><div class="script-entry" id="ts-56-39" data-ts="56:39">
+      <div class="entry-ts">56:39</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">그래서 그래서 지금 운영과 관련된 여기 지금 윤정 님하고 알바생들과 함께 작업할 수 있는 것들을 함께 좀 쓰라고요.</div>
+    </div><div class="script-entry" id="ts-57-10" data-ts="57:10">
+      <div class="entry-ts">57:10</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">알바 일단 5월 말까지인데요.</div>
+    </div><div class="script-entry" id="ts-57-13" data-ts="57:13">
+      <div class="entry-ts">57:13</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">한 달, 6월 말까지는 무조건 연장해야 해요.</div>
+    </div><div class="script-entry" id="ts-57-37" data-ts="57:37">
+      <div class="entry-ts">57:37</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">근데 단기 계약이라고 해서 근로라고 해서 계약서 쓰지 않았어요?</div>
+    </div><div class="script-entry" id="ts-57-54" data-ts="57:54">
+      <div class="entry-ts">57:54</div>
+      <div class="entry-speaker sp2">참석자 2</div>
+      <div class="entry-text">오늘 했는 거는 정리해서 다시 한번 슬랙에 주세요. 그래야지 이 혹시라도 잘못 이해하고 있는 거는 수정하고요.</div>
+    </div><div class="script-entry" id="ts-58-00" data-ts="58:00">
+      <div class="entry-ts">58:00</div>
+      <div class="entry-speaker sp3">참석자 3</div>
+      <div class="entry-text">제가 오늘 계속 얘기하지, 이따가 제가 보실 수 있는 자료, 생부 등록하는 이런 것들은 다른 사이트를 알려줄게요. 참고하시는 사이트, 거기 바이본이라는 서비스가 있는데 거기가 잔이 있어요. 그거 참고하시면 이런 게 필요할 수 있겠구나를 미리 좀 감 잡을 수 있어요.</div>
+    </div></div>
+</div>
+
+<script>
+const scriptData = [
+  {ts:"00:00", speaker:"참석자 1", text:"되어 있는 것들에 대한 일정 같은 것들 좀 체크를 해야 될 것 같은데, 지금 키스톤(굿 빌더) 같은 경우에는 개미 인력 개발 그쪽이랑 미팅을 해야 할 것 같아요. 어쨌든 지금 저희가 타깃으로 잡는 게 현장 소장하고 기능공인데, 현장 소장 쪽은 저희가 움직일 수 있는 데에는 분명히 한계가 있어 보이거든요."},
+  {ts:"00:57", speaker:"참석자 2", text:"그러면 개미 인력 개발은 제가 남 상무님 통해서 연락을 하려고 했는데 계속 연락 못하셨다고 하네요. 오늘 중에 강사님과 말씀드려서 다음 미팅 전에 한번 미팅 일정을 조율하는 걸로 할게요."},
+  {ts:"01:17", speaker:"참석자 1", text:"그게 좀 돼야 저희도 사실 아무리 머리를 굴려봐도 현장 소장을 컨택할 방법이 마땅치가 않더라고요. 결국에는 오프라인 영업을 통해서 풀든, 관계가 있는 쪽을 통해서 좀 뚫어야 될 것 같아요. 저희 예전에 건설인협회 쪽이랑 미팅을 하지 않았었나요?"},
+  {ts:"01:52", speaker:"참석자 2", text:"건설인 협회에 정원 팀장 아는 분 있나요?"},
+  {ts:"01:55", speaker:"참석자 3", text:"건설이 잡혀요. 저는 키스톤(굿 빌더)과 전혀 무관한 건인데, 가서 뭔가 설문 같은 거 하고 왔거든요. 작년에 문정순 이사님이 원래 담당이었던 건데 그때 없어지면서 제가 대신 가서요."},
+  {ts:"02:13", speaker:"참석자 2", text:"이번에 굿 빌더 하면서 경영 전략 그때 서주현 이사가 관여했었잖아요."},
+  {ts:"02:17", speaker:"참석자 1", text:"저도 그 기억이 나거든요. 그러니까 지금 어쨌든 현장 소장 쪽을 뚫어보려면 저희가 직접 하는 것보다는 개미 인력 개발이든 건설인 협회든 뭔가 이런 채널을 활용해야 할 것 같아요."},
+  {ts:"02:31", speaker:"참석자 4", text:"건설 공제회 쪽에 들어달라고 하긴 했는데, 아예 못 들어온 것 같아요."},
+  {ts:"02:41", speaker:"참석자 4", text:"데이터 수집 차원에서 공제회를 어떻게 만날 수 있냐 얘기했었고, 노무비 닷컴도 좀 불러달라고 했는데 아직 연락이 없어요."},
+  {ts:"03:11", speaker:"참석자 1", text:"일단은 기능공 쪽은 어떻게든 온라인으로든 풀어볼 방법들을 계속 고민해 보고, 오픈 프로모션을 통해서라도 해볼 수 있을 것 같은데, 현장 소장 쪽은 저희가 직접 뚫기에는 제한적인 영역들이 많아서 그 부분들을 좀 한번 다시 체크해 봐 주시면 좋겠습니다."},
+  {ts:"03:57", speaker:"참석자 4", text:"필드 일정은 아직 변화가 없어요."},
+  {ts:"04:13", speaker:"참석자 1", text:"지난주에 서비스 리뷰는 굿 빌더도 했고, 필드도 브릿지도 다 리뷰한 상태입니다."},
+  {ts:"04:26", speaker:"참석자 1", text:"브릿지는 이미 상품이 정해져 있는 상황이고, 히스토(굿 빌더) 쪽은 지금 BM을 제가 다시 보고 있는 중이에요. 자금 흐름 관련 버전은 사장님이 확인해 주신다고 하고서 아직 깜깜 무소식인 상태예요."},
+  {ts:"05:01", speaker:"참석자 2", text:"재차 한번 얘기할 기회가 있어서 얘기를 했었는데, 사장님 시각은 쉽지 않아 보인다는 생각만 갖고 계시더라고요."},
+  {ts:"05:13", speaker:"참석자 1", text:"박영미 이사도 예전에 비슷한 것들을 했었다고 하더라고요. 잠깐 논의를 했었는데, 실제 소액 대출해주는 업체랑 같이 껴서 했는데 스타트업들이 그것 때문에 부도 나고 하면서 실제 어음 부도율이 꽤 높았나 보더라고요."},
+  {ts:"05:41", speaker:"참석자 4", text:"키움 캐피탈은 그런 건 안 하나요?"},
+  {ts:"05:46", speaker:"참석자 2", text:"뭐 하려면 검토는 할 수 있는데 아직 그런 거 안 해요. 그때 당시에는 파트너가 스타트업이었고, 지금 여기 하도급사나 원청사들은 이 업에서 오랫동안 이 역할을 해왔던 사람들이라 상황이 다르죠."},
+  {ts:"06:04", speaker:"참석자 1", text:"지금 저희가 고민 중인 게, 굿 빌더에서 저희가 타깃으로 삼아야 하는 시장이 어디냐라는 고민이 있어요. 대형 건설 시장 위주로 얘기를 풀어왔었는데, 그 시장을 저희가 쉽게 뚫어 들어갈 수 있느냐라는 고민이 하나 있고, 오히려 소규모 건설 사업장이 될 수도 있겠다는 생각도 들어요."},
+  {ts:"07:03", speaker:"참석자 1", text:"소규모 사업체는 별도 현장 소장이 따로 존재한다기보다는 반장이나 작업팀을 모집하는 쪽이 많아서, 인테리어 공사라든지 이런 소규모 사업체 쪽에 좀 더 니즈가 있지 않을까라는 생각도 드거든요."},
+  {ts:"07:34", speaker:"참석자 5", text:"크게 나누면 어떻게 나눠야 하나요? 항상 아파트 건설 현장 같은 느낌으로 얘기를 들었는데요."},
+  {ts:"07:43", speaker:"참석자 2", text:"저번에 가서 크게는 3개로 나눴어요. 하나는 토목, 그다음에 플랜트, 그다음에 일반 건설. 이 세 가지예요."},
+  {ts:"08:06", speaker:"참석자 1", text:"지금까지 논의의 기반은 대규모 현장 기반으로 보통 얘기를 끌고 왔었는데, 진짜 대규모 현장에서 굿 빌더 서비스가 파고들어갈 구멍이 많이 있을까라고 생각해보니, 오히려 인테리어나 리모델링 소규모 현장에 기회가 더 많지 않을까라는 생각이 들기 시작해서요. 이 논의는 한 번도 해본 적이 없었거든요."},
+  {ts:"08:18", speaker:"참석자 1", text:"공공은 아니고 민간 쪽에서, 사실 지금까지는 대규모 현장 기반으로 얘기를 끌고 왔었는데, 오히려 인테리어나 리모델링하는 소규모 현장에 기회가 더 많지 않을까라는 생각이 들기 시작해가지고, 이 논의는 한 번도 해본 적이 없었거든요."},
+  {ts:"09:26", speaker:"참석자 1", text:"결국에는 초기 시장 접근인 거거든요. 모든 서비스가 초기 시장 접근은 어디로 하든 나중에 전체 시장을 타깃으로 넓혀가는 거긴 하지만, 저희가 최초의 접근을 좀 하려면 어쨌든 기능공이든 기능공 팀이든 이 사람들한테 '여기에 등록해 놓으니까 어쨌든 연락이 오더라'라는 경험을 줘야 해요."},
+  {ts:"10:48", speaker:"참석자 1", text:"시장에 대한 접근 방향에 대한 합의는 한 번쯤은 하고 가야 될 것 같긴 해요. 그에 따라서 운영이나 마케팅에 대한 타겟도 많이 달라질 것 같거든요."},
+  {ts:"11:03", speaker:"참석자 2", text:"지금 굿 빌더 개발 중인 스펙은 그냥 상수로 넣어야 될 것 같고요. 지금 와서 손댈 수는 없어요. 근데 그 스펙은 작은 현장이든 큰 현장이든 사실상 업무 프로세스는 유사하다라는 걸 기반으로 스터디도 하고 조사를 해서 만들어졌어요. 그러면 큰 기업들에 이걸 도입시키는 게 쉽냐, 아니면 작은 인테리어 쪽이 도입하기 쉽냐의 문제인 거죠."},
+  {ts:"12:09", speaker:"참석자 1", text:"그렇다면 어쨌든 여기에서 팀들의 리뷰가 쌓이고 뭔가의 데이터가 축적이 돼야 나중에 저는 큰 시장을 올 수 있을 거라는 생각이 들거든요. 아무런 게 쌓여 있지 않은데 큰 기업들이 저희를 쓸 이유는 없어 보여서요."},
+  {ts:"12:36", speaker:"참석자 2", text:"도급사 끼고 밑에 일용직이든 기능공들 써서 하는 시장이 굉장히 신뢰 기반의 프로세스를 갖고 있어요. 그렇기 때문에 웬만하면 믿는 사람들 중심으로 이걸 해나가고 있는데, 그러면 가벼운 공사, 규모가 작은 것부터 먼저 들어간다는 방향에 대해서는 다른 분들 이견 있으세요?"},
+  {ts:"13:30", speaker:"참석자 1", text:"큰 데는 들어가기 어렵다는 가설은 갖고 있었지만, 항상 논의는 그걸 위주로 해왔었긴 했었나 싶어요."},
+  {ts:"14:09", speaker:"참석자 1", text:"제가 개미 인력 개발을 만나고 싶어 하는 이유는 그 일용직 노동자를 원하는 게 아니라, 현장 소장 쪽으로 연락이 오는 분들을 연결해보고 싶어서예요."},
+  {ts:"14:19", speaker:"참석자 2", text:"마찬가지로, 그걸 DB화할 수 있으면 거기에다 마케팅 비용 엄청 쏟아부어도 돼요. 하나 등록할 때마다 인당 한 10만 원씩 줘도 돼요."},
+  {ts:"14:29", speaker:"참석자 4", text:"오히려 어떤 사람들이 맞냐가 키 포인트가 될 수도 있겠어요."},
+  {ts:"14:33", speaker:"참석자 2", text:"그래서 인력 개발을 개미뿐만 아니라 몇 군데 더 좀 서칭을 해봅시다. 전국망이 있거나 여러 개 지점을 갖고 있는 곳들이 있으면 리스트업 해두고, 그거 다 만나봐야죠. 일단 개미는 제가 컨택해볼 테니까 나머지 리스트업 작업을 먼저 좀 합시다."},
+  {ts:"15:44", speaker:"참석자 1", text:"일단은 그 기준으로 좀 고민이 디벨롭해보는 거죠."},
+  {ts:"15:48", speaker:"참석자 2", text:"좋아요. 이거는 빨리 결정하고 가면 되는 문제인 것 같아요. 더 이상 여기에 대해서 고민할 필요는 없고."},
+  {ts:"15:54", speaker:"참석자 1", text:"어쨌든 큰 시장 뚫는 거는 나중으로 두더라도, 일단은 접근이 가능한 시장 쪽으로 뚫는 방향으로. 바이럴 채널들도 큰 업체들 말고 네이버 카페 인테리어 카페라든지 이런 쪽을 주도적으로 좀 건드려보는 형태로 가야 할 것 같아요."},
+  {ts:"16:26", speaker:"참석자 2", text:"도급사 쪽에 현장 소장이라든지 일하는 애들이 결국 중간에 허브 역할을 해서 모이는 곳은 인력 개발 인력 사무소가 지금 거의 절대적일 것 같은데, 다른 곳들 중에서도 이런 것들이 있을까요?"},
+  {ts:"16:46", speaker:"참석자 5", text:"지난번에 얘기했듯이 전화번호 리스트를 갖고 있는 거잖아요. 그런 리스트를 모아놓는 곳을요."},
+  {ts:"17:08", speaker:"참석자 2", text:"전화번호부에 있는 걸 굿 빌더로 옮기는 작업을 위해서 굿 빌더에 그 기능이 일단 탑재가 되고 있고, 두 번째로 전화번호부에 없는 사람은 현재 기준으로 인력 개발 인력 사무소에 연락할 것 같거든요. 전국에 있는 인력 개발 중개 사무소를 최대한 많이 리스트업하고 이쪽에 컨택해 본다, 그게 저는 가장 직접적인 방법일 것 같아요."},
+  {ts:"17:45", speaker:"참석자 1", text:"그건 좀 준비를 해봐야 될 것 같아요. 인력 개발 업체들은 기본적으로 저희에 대한 호의적이지 않은 반응들이 좀 있긴 해서요."},
+  {ts:"17:57", speaker:"참석자 2", text:"그치. 그래서 상생안을 고민을 해야 되는데, 굿 빌더가 나왔을 때 얘네가 굿 빌더를 이용해서 자기 비즈니스에 좀 더 도움되게끔 하는 방법이 뭐가 있느냐, 그거를 좀 들어서 나중에 필요하면 굿 빌더에 인력 사무소에 대한 계정 권한 같은 것들이 좀 있어야 될 수도 있어요."},
+  {ts:"18:25", speaker:"참석자 4", text:"근데 그때 사장님은 그거 되게 부정적이셨던 것 같아요. 인력을 우리가 대체하는 거지, 걔네가 우리를 쓰는 거에 대해서는요."},
+  {ts:"18:43", speaker:"참석자 1", text:"저도 인력 개발 사무소가 우리를 쓰게 하는 것들이 목표는 아닌 것 같고, 어쨌든 걔네들도 건설 관련된 업체다 보니까 알고 있는 기능공 인력들은 있을 거고, 현장 소장이나 일을 주는 사람들을 연결시켜주는 대가를 우리가 걔네들한테 지불해야 하는 거고, 걔네들이 우리 안에 들어와서 뭔가 액션을 하는 건 아닌 거 같아요."},
+  {ts:"19:37", speaker:"참석자 5", text:"건축 발주를 하면 도면부터 시작해서 설계사무소가 선정되는 과정이 있잖아요. 건축 시공 회사를 선정할 때는 또 따로인가요?"},
+  {ts:"19:52", speaker:"참석자 1", text:"완전 따로예요. 설계는 따로 하고, 그 도면 가지고 이제 입찰을 만나요."},
+  {ts:"21:10", speaker:"참석자 1", text:"설계사무소들이 사실은 자기랑 일했었던 업체들을 연결해서 소개나 이런 것들을 할 수 있는 거죠."},
+  {ts:"21:41", speaker:"참석자 5", text:"지방에 약간 빌라 짓는 지방 건설사들 있잖아요. 이 건설사 사장은 현장 소장이에요. 사장이 다 겸직하는 거죠. 거의 1인 아닌가요?"},
+  {ts:"22:10", speaker:"참석자 2", text:"규모가 크든 작든 그 역할은 무조건 존재하죠. 대표가 같이 하든 아니든, 회사 상황에 따라 다를 거고요."},
+  {ts:"22:25", speaker:"참석자 2", text:"그러면 팀장님 쪽에서 인력 사무소가 우리 굿 빌더 서비스를 이용할 수밖에 없는 이유를, 이용해야만 하는 이유를 좀 만들어보는 건 어떨까요?"},
+  {ts:"22:42", speaker:"참석자 6", text:"서비스는 정해졌다고 하셔서, 지금 스펙이 아예 정해진 거잖아요. 건설 업체들이 저희를 써야만 하는 이유가 거의 필사 수준이어야 될 것 같은데, 그런 게 지금 없더라고요. 서비스 상에서는요."},
+  {ts:"23:02", speaker:"참석자 4", text:"반드시 써야 하는 건 아무 데도 없지요. 그걸 갖다가 장점이 있는 거지, 반드시 써야 되는 게 아니라 법적으로 제공되는 경우를 제외하고는요."},
+  {ts:"23:09", speaker:"참석자 2", text:"현장에서 돌아가는 일에 업무 로드를 가급적이면 많이 줄여줄 수 있는 기능들을 담고는 있어요."},
+  {ts:"23:16", speaker:"참석자 6", text:"그건 봤는데, 예를 들어서 키움에서 해가지고 선정산을 태운다든가, 그게 키 포인트였는데 지금 저희 기능이 빠져 있잖아요."},
+  {ts:"23:30", speaker:"참석자 4", text:"그건 법적으로 안 된다니까요."},
+  {ts:"24:00", speaker:"참석자 4", text:"우리도 계속 돈에 대한 걸 얘기를 했는데, 결국 그거는 언제 다칠지 모르는 부분이기 때문에, 그래서 선지급은 하기가 힘들어요. 그래서 그때 얘기 대신 나온 게 대출 모델인 거잖아요. 대출 모델은 이제 키움이랑 얘기를 해서 개인 신용대출을 할 수 있냐인데, 그것도 사실 리스크 똑같이 있죠."},
+  {ts:"24:59", speaker:"참석자 1", text:"이제 예전에 얘기했던 건 개인이 아니고 기업 어음 할인하는 방식이었어요."},
+  {ts:"25:16", speaker:"참석자 1", text:"어음 할인을 하는 업체, 제2금융권들은 되게 많아요. 우리가 어느 정도 부담을 지느냐에 따라 좀 달라질 것 같아요."},
+  {ts:"25:31", speaker:"참석자 2", text:"가다(GADA)가 아까 보면 사실상 인력 사무소 역할을 하면서 하고 있잖아요. 그 말은 뭐냐 하면 겉으로는 인력 사무소인데, 그들이 업무에 활용하고 있는 백오피스 시스템을 가다 서비스를 쓰고 있는 거겠죠 사실상."},
+  {ts:"26:35", speaker:"참석자 2", text:"개미처럼 전국망이 있는 인력 개발 업체들에 우리가 제공해 준 이 서비스를 쓰게끔 해주겠다. 근데 그 제안이 하나의 업체가 아니라 여러 개가 필요한 게, 너네 이거 안 들어오면 우리는 얘네랑 할 거야라고 할 수 있을 정도의 협상을 하면서 걔네들을 끌고 와서, 너네 일자리 들어오면 아침에 생각해 보는 거죠."},
+  {ts:"27:11", speaker:"참석자 2", text:"딱 들어왔을 때 아침에 우리는 전부 다 이거 굿 빌더 가입하세요. 걔네들 굿 빌더 통해가지고 급여라든지 공수라든지 이런 거 관리하게끔 하고 앞으로 이거 통해서 연결합니다. 그러면 이제 걔네들 입장에서는 굿 빌더 들어가고 나면 얘네들이 자기네끼리 다 매칭돼서 하면 우리는 돈 어떻게 벌어라는 고민이 들 거잖아요."},
+  {ts:"27:44", speaker:"참석자 6", text:"그러니까 저도 그래서 여기서 논의를 하기 시작한 거예요. 느낌은 숨고가 청소 업체를 대체했던 거랑 똑같거든요. 그러면은 건설 수주가 많이 있어야 되고, 일단 깔려 있어야 되고. 지금은 양쪽에 아무것도 없는 거잖아요. 카페를 차렸는데 여자 고객을 모집하면 남자 고객이 들어오는데, 아무것도 없는 여자 고객이 와야 되는 이유는 없는 거잖아요."},
+  {ts:"28:42", speaker:"참석자 4", text:"지금 우리가 하는 거는 공수 관리, 그게 지금 그 핵심 키워드예요."},
+  {ts:"28:47", speaker:"참석자 6", text:"그러니까요. 예를 들어서 공수 관리가 핵심 키워드면은 중대재해처벌법을 면피를 해준다든가, 안전모 찍고 올리면 다 진짜 이거 쓰면 안전해라든가, 이런 워딩이 있어야 되는데, 우리의 슬로건 같은 게 있어야 되는데, 그게 뭔지를 모르겠는 거예요."},
+  {ts:"29:02", speaker:"참석자 4", text:"하도급 업체 입장에서는 기존에 다 서류 작업하던 걸, 플랫폼으로 작업자가 들어오면 작업자들이 자동으로 디지털에서 출근 체크를 한다든지 서류 작성을 한다든지 하면은 내가 할 일을 걔네에게 시킬 수 있는 거죠. 그런 공수 관리나 이런 작업들을 작업자들을 플랫폼으로 끌어들인 다음 내가 편하게 할 수 있다는 거예요."},
+  {ts:"30:46", speaker:"참석자 4", text:"저희는 그래서 일단은 이 플랫폼을 쓰는 이유는, 공수 관리를 하도급자 입장에서 편리하게 하고, 작업자 입장에서는 개인적인 공수도 관리하면서 하도급사랑 연계된 걸 여기서 편리하게 관리할 수 있다는 게 지금 보는 거고요. 그래서 이걸 끌어들이는 이유는 이제 그 관리 기능을 공짜로 제공하겠다는 거고, 그렇게 돼서 양쪽에서 모이면 그 안에서 저희가 매칭을 일으켜주고 거기서 돈을 받자가 지금의 우리의 로직이에요."},
+  {ts:"31:15", speaker:"참석자 6", text:"그게 익숙해져 있으면 어떡하지가 일단 하나가 있고요. 과거 경험상으로는 런칭할 때 이미 깔려 있어야 되거든요. 업체도 몇 개 있어야 되고 사람도 있어야 되고, 근데 지금 만약에 드문드문 몇 개 정도 이렇게 해가지고 런칭하면 망할 것 같고요."},
+  {ts:"32:13", speaker:"참석자 6", text:"이 시장에서는 팀장이 작업자들 퍼센테이지로 가져오잖아요. 이걸 좀 정산 대시보드에서 소득세를 좀 줄여줄 수 있게 한다든가 그런 것들이 좀 있어야 되는 거 아닐까요?"},
+  {ts:"32:24", speaker:"참석자 4", text:"돈에 대한 건 우리가 들어가기가 힘들어요. 건드리면 이게 법이랑 좀 문제가 생겨서, 돈에 대한 건 우리가 건드리는 걸 포기했어요."},
+  {ts:"33:03", speaker:"참석자 6", text:"그러면 남은 거는 급부인 것 같아요. 기능공들은 단시간 대체가 안 될 거고, 잡부들부터 시작해서 지금 당장 내일부터 안 나온다고 한다면요."},
+  {ts:"33:28", speaker:"참석자 1", text:"지금 우려하는 바나 걱정하는 바가 뭔지는 알고 있는데, 지금 그거를 지금 거기가 다 블랙박스인 것 같아요. 어떤 게 진짜 페인 포인트고 어떤 걸 해결해 줘야 누군가가 들어올 거고. 지금 현재 건설 시장은 다 페이퍼 위주의 되게 손이 많이 가는 형태로 업무를 하고 있는 상태이고, 많은 업체들에서 디지털화에 도전을 했다가 판판이 깨져 나갔던 게 지금까지의 상황이에요."},
+  {ts:"34:11", speaker:"참석자 6", text:"가다는 자연스럽게 쓴 건 아니죠."},
+  {ts:"34:17", speaker:"참석자 4", text:"가다는 현대산업개발이 관련돼 있어요."},
+  {ts:"34:18", speaker:"참석자 1", text:"현대산업개발에서 자회사 스타트업으로 출발한 거고, 가다 자체도 그냥 인력을 채용하기 위한 플랫폼인 것뿐이고, 거기에서 근무하는 사람들을 인력 관리하거나 이런 쪽의 서비스들은 아니에요."},
+  {ts:"34:49", speaker:"참석자 6", text:"기존에 디지털화를 하려고 했는데 실패한 사람들은 어떻게 해서 실패한 건지, 그 페인 포인트를 알 수 있을까요?"},
+  {ts:"34:49", speaker:"참석자 1", text:"지금 가다도 일용직 시장을 못 벗어나고 있는 이유 중에 하나가, 결국은 현장 소장이 갖고 있는 그 폰 안에 있는 데이터를 온라인으로 끌어모으지 못했어서 실패를 한 건 맞죠."},
+  {ts:"35:18", speaker:"참석자 2", text:"일단 여기 일다오에 보면 다 리스트 있잖아요. 전화번호도 있고, 이거 다 아웃바운드 해야죠."},
+  {ts:"35:52", speaker:"참석자 2", text:"그래서 얘네들한테 다 컨택해서 이런 서비스를 출시하는데 이번에 한 번 가입해오면 프로모션으로 팀원들을 관리할 수 있는 이런 것까지 다 우리가 제공된다고 하면서 들어오시면 혜택 주고 있으니까 지금 써보셔라. 이거는 무조건 가야 되는 기능이고요."},
+  {ts:"37:14", speaker:"참석자 2", text:"그래서 당신들이 정말 불가피하게 해야 되는 업무에 있어서는 우리가 편하게 만들어 줄게가 이 컨셉인 거고, 두 번째는 팀장급 여기서 계속 아웃바운드 하는 전략. 하도급사는 인력 사무소에 보면 하도급사들 리스트 다 있을 것 같아요. 그 사람들한테 한 명 한 명 회원 가입시키면 5만 원씩 줄게, 예를 들면 막 그런 거라도 해야 된다는 거죠."},
+  {ts:"37:50", speaker:"참석자 6", text:"그럼 남은 건 양이네요. 기능공 양이랑 소장들 양, 이거밖에 안 남는 거예요."},
+  {ts:"38:01", speaker:"참석자 2", text:"그렇지, 일단 걔네들 먼저 모이기 시작하면요."},
+  {ts:"38:05", speaker:"참석자 6", text:"하는 게 아니라 런칭할 때 모이고 있어야죠. 지금 상황에서요."},
+  {ts:"38:19", speaker:"참석자 2", text:"사전 신청을 따로 받던, 그러면 우리가 나중에 일괄 초대 메시지 보내가지고 쫙 들어오게끔 할 수도 있고, 그런 게 필요해요. 그 설계가 사실 우리가 맨날 그동안 잘 못 해왔거든요. 이번에는 그거를 시간을 두고 5월 달 안에는 마무리해야 될 것 같아요."},
+  {ts:"38:53", speaker:"참석자 4", text:"그 이야기, 그리고 전자계약이 지금 보니까 수수료가 거의 건당 천 원이더라고요. 계속 무료로 쓸 수는 없을 것 같아요. 그래서 한시적으로 뭔가 무료화하는 거를 좀 어필할 수도 있어요."},
+  {ts:"40:12", speaker:"참석자 2", text:"근데 약간 느낌이, 야 이거 시작하는데 이때 우리 참여해야 돼, 참여 안 하면은 도태되거나 우리 뒤처질 것 같아라는 느낌이 들게끔 앞단에 뭔가 빌드업이 있어야 될 것 같고, 들어오고 나서는 초기에는 아마 그런 비용들은 무조건 쓸 수밖에 없을 거예요. 여기 일다오 기준으로만 보면 전문팀 2500팀 인재 정보 11만 6천이거든요."},
+  {ts:"41:39", speaker:"참석자 2", text:"10만 원 준다 하면요. 그게 10만 원 너무 크고, 한 5만 원 정도 주면은 줄 서 있지 않을까요?"},
+  {ts:"41:46", speaker:"참석자 5", text:"초반에 그래서 그걸 원래 하려고 했어요. 원래 초반에 팀장들 모아서 팀 회식비 지원해 준다, 이런 식으로 해가지고 10명 등록하면 이런 식으로요."},
+  {ts:"42:34", speaker:"참석자 2", text:"그리고 굿 빌더 예전에 상품 아이디어 고민하다가 생각해 본 거는, 요즘에 알바 천국에서 상품 제일 잘 팔리는 애도 그렇고, 결국 뭐냐면 시간을 가지고 장난치는 상품들 있잖아요. 나는 지금 올려야 되는데 24시간 후에 올라가. 그러니까 내가 돈 더 내고 지금 올리고. 저희도 나중에 상품도 좀 생각해볼 문제가, 기본적으로 일주일에 한 번 정도는 그냥 매칭하는 것까지 할 수 있고, 근데 더 빨리 매칭하려면 좀 더 필요한 거야."},
+  {ts:"43:26", speaker:"참석자 2", text:"출석 체크 같은 거 있잖아요. 앱에 들어가서 출석 체크했을 때 이 사람들에게 일주일 동안 출석 체크하면 예를 들면 매칭 포인트 2개를 준다든지, 이런 식의 어떤 설계들이 나중에 서비스에 같이 반영이 돼야 되지 않을까라는 생각은 좀 하고 있어요."},
+  {ts:"44:04", speaker:"참석자 1", text:"일단은 굿 빌더는 어쨌든 제휴에서 만날 수 있는 업체들은 최대한 커피 만나보고, 저희 입장에서는 일단은 최대한 팀장·기능공 팀장에 대한 연락처를 최대한 확보해서 그거를 어떻게 그들한테 미리 서비스 홍보를 돌리고 유입을 시킬지에 대한 방안을 짜는 게 지금은 우리로서는 현재 첫 단계인 것 같긴 해요."},
+  {ts:"44:37", speaker:"참석자 2", text:"그러면 실장님 정리를 하면, 현장 소장이나 도급사 일용직 기능공은 이 매개가 되는 곳은 인력 사무소다. 그럼 인력 사무소는 첫 번째 작업은 리스트업 다 찾고, 두 번째 작업은 그 리스트업된 인력 사무소와 우리가 딜을 하기 위한 전략을 수립해야 될 것 같고, 두 번째는 팀장 직급이라든지, 여기 개인들도 전화번호 다 있나요 일다오에?"},
+  {ts:"45:27", speaker:"참석자 2", text:"연락처가 수집되는 애들은 따로 다 리스트업해가지고, 걔네는 결국 아웃바운드로 우리가 설득하는데, 이때도 마찬가지로 걔네들 설득할 때 어떤 베네핏을 줄 거냐. 요 흐름으로 일단은 설계가 좀 돼야 될 것 같아요."},
+  {ts:"45:40", speaker:"참석자 1", text:"강하면 그렇게 설계하고, 실제 아웃바운드 콜 돌리는 거 우리가 직접 하기가 좀 어려울 거니까, 그거는 알바를 고용해서 하든 방법을 좀 찾긴 해야 될 것 같아요."},
+  {ts:"45:54", speaker:"참석자 2", text:"그리고 이거와 동시에 상품 말씀드렸던 아이디어로는 하나 그 컨셉으로는 하나 고민을 해봤으면 좋겠어요. 아무리 내가 생각을 해봐도 얘네한테 뭔가 수당을 가로채는 느낌은 안 좋고, 우리가 매칭을 시켜주는데 니가 돈을 더 내면은 더 빨리 매칭을 빨리 할 수 있는 이용권들이 주어져, 예를 들어 이런 형태여야 될 것 같아요."},
+  {ts:"46:19", speaker:"참석자 1", text:"저는 지난주에도 얘기했지만 결국에는 이력서 하이라이트처럼 이용권을 결제를 하면 니가 더 많은 횟수에 추천이 돼, 이런 형태로요."},
+  {ts:"47:13", speaker:"참석자 2", text:"도급사나 원청사 이쪽 애들은 쉽지는 않겠지만, 아까 우리 캐피탈을 활용한 유동성 모델이 있잖아요. 그거 태핑만 해봅시다."},
+  {ts:"48:04", speaker:"참석자 4", text:"이거는 김 이사님이 네트워킹에 좀 가지고 있을 수도 있을 것 같은데, 제가 한번 다시 여쭤볼게요."},
+  {ts:"48:08", speaker:"참석자 2", text:"그쪽에 한번 물어봐 주시고. B2C는 일단은 아까 그런 상품으로 가고, B2B 쪽은 일단은 금융 모델 검토하는 걸로 하시고요. 비투비는 지금 현장 정보 등록해가지고 이렇게 이렇게 쓰는 것만 해도 그 사람들한테 우리는 땡큐인데, 굳이 뭐 돈 내고 쓰라고 할 수 있는 그게 없을 것 같아요."},
+  {ts:"48:24", speaker:"참석자 4", text:"그게 제일 쉽지가 않지요. 근데 숙제이기도 하고, 왜냐하면 개인만으로는 이게 볼륨이 잘 안 올라올 거라서요."},
+  {ts:"48:30", speaker:"참석자 1", text:"그러니까 결국엔 스텝인 거죠. BM이 확장되는 모델이라고 봐야 되는 거죠."},
+  {ts:"48:43", speaker:"참석자 4", text:"하나 이게 로드맵에서 숫자가 창의적인 게 보여야 투자가. 일단 1단계에서 얼마 안 되더라도 3단계까지 가면 이게 커진다는 걸 보여줘야 돼요."},
+  {ts:"49:00", speaker:"참석자 5", text:"건설 임금 노무비가 크긴 한데, 빨대 꽂을 방법이 없는 거 아니에요?"},
+  {ts:"49:47", speaker:"참석자 1", text:"거기는 이런 식이죠."},
+  {ts:"50:12", speaker:"참석자 2", text:"그러면 시나리오상 B2B가 어느 정도 확보가 되고 이제 서비스가 돌아가고 있다고 치고, 그러면 얘네들한테 어떤 모델로 돈을 받을 거냐를 미리 고민하는 거는 의미는 있죠."},
+  {ts:"51:07", speaker:"참석자 1", text:"실제 시공사 건설팀이나 이런 것들이 여기에 저희가 기능 팀들이 다 모여 있고 평판들이 어느 정도 쌓여 있으면, 나중에는 어쨌든 인테리어 업자든 아니면 소규모 시공 건설 설계 업체든 이런 애들이 이쪽에 들어와서 실제 시공할 수 있는 팀들을 찾는 형태로까지 하면서 걔네들한테 발주를 이미 안에서 내는 형태로까지 확장할 수도 있어요. 그럼 그 안에서 저희가 수수료를 받거나 이럴 수 있는 여지들이 있죠. 결국엔 일종의 입찰과 낙찰을 저희 플랫폼 안에서 구현을 하게 되는 거죠."},
+  {ts:"52:01", speaker:"참석자 6", text:"네, 숨고, 오늘의 집 이런 유는 뭘로 돈 받냐면요. 거기는 지금 청소를 반드시 하고 싶은 사람이 있잖아요. 그 사람이 청소받고 싶다고 올리면 업체들이 그 사람한테 연락 메시지 때릴 때 돈을 내는 거예요."},
+  {ts:"52:20", speaker:"참석자 4", text:"친구도 예전에 내가 진짜 초창기에 만났었는데, 걔네들 무슨 전시회나 그런 거 있잖아요. 업계 관련 행사들 그런 데에 무조건 부스가 됐건 됐건 간에 가가지고 계속 홍보하고 자기네 가입해달라고 하고 그 활동을 엄청 하더라고요. 그렇게 막 하더니 한 1~2년 후에 많이 커졌어."},
+  {ts:"53:07", speaker:"참석자 2", text:"이거 하도급이나 이런데 그런 니즈들이 있을까요? 우리가 쉽게 말해서 온라인 인력 중개 사업 서비스다라고 자리매김을 하면, 우리 개미가 됐건 인력 개발하는 애들이 사실상 일단 매니저 같은 역할이 있을 수 있고, 우리한테 의뢰가 오는 거예요. 어떤 현장에 대규모 반도체가 됐건 뭔가 여러 가지 일들이 생길 거잖아요. 그럼 우리가 걔네들하고 먼저 그럼 너네 필요한 인력들을 우리가 특정 기간 동안은 우리한테 얘기만 하면 우리가 다 보내줄게."},
+  {ts:"54:00", speaker:"참석자 1", text:"워킹을 하려면은 가장 아까 처음에 말씀하신 것처럼 하자나 이런 문제가 발생을 했을 때에 대한 처리 프로세스가 내부에 필요해요. 걔네들이 그냥 온라인에서 잘 모르는 아무나 데리고 안 쓰려는 가장 큰 이유가, 내가 사람을 썼는데 이게 공사가 제대로 워킹하지 않았을 때 이걸 어떻게 하느냐, 하자 보수는 누가 어떤 비용을 들여서 할 것이냐, 내가 아는 팀을 썼으면 걔네들한테 욕을 하고 니네가 와서 일을 해라라고 하면 되지만요."},
+  {ts:"54:55", speaker:"참석자 1", text:"그럴 수 있는데, 지금 어쨌든 저희가 바라보는 시장은 단순 노무는 아니다 보니까요."},
+  {ts:"55:00", speaker:"참석자 6", text:"그러면 인력 사무소가 아니라 인력개발원이랑 해야 되는 거 아닐까요? 지금 보니까 일다오가 한 180개 교육기관이랑 제휴를 한 것 같은데, 그러니까 개발해서 취업하겠다는 니즈가 있는 사람들을 바로 현장에 꽂는 역할을 해야 되는 건가요?"},
+  {ts:"55:24", speaker:"참석자 1", text:"이거 좀 고민이 더 필요한 내용이긴 해요."},
+  {ts:"55:27", speaker:"참석자 2", text:"일단 그 부분 추가로 고민을 하시고, 브릿지는 오늘 더 논의할 내용이 있나요?"},
+  {ts:"55:37", speaker:"참석자 3", text:"운영 관련해서 요청드릴 거 있어서요."},
+  {ts:"55:44", speaker:"참석자 3", text:"운영이 이제 활성화도 활성화인데, 얘를 이제 돌리는 것도 운영이잖아요. 저희가 지금 필요한 것 중에 하나가 서비스 이용 가이드 콘텐츠 작업이 좀 필요해요. 예를 들어서 생활기록부 넣는 방법, 컨설팅에 대한 방법 이런 것들이 좀 작성이 돼 있고 얘를 개발하는 거는 다른 문제니까, 이 콘텐츠 정리가 먼저 필요한데요."},
+  {ts:"56:15", speaker:"참석자 2", text:"그리고 이번에 알바 3명 뽑았잖아요. 그리고 2명 더 뽑을 거지요. 그러면 그 5명의 역할은 어떤 역할을 한다라고 딱 계약서에 명시돼 있나요?"},
+  {ts:"56:23", speaker:"참석자 3", text:"계약서에 제가 계약서를 들여다보진 않았는데, 제가 요청하는 거는 데이터를 수집하고 검증한다는 거예요."},
+  {ts:"56:39", speaker:"참석자 2", text:"그래서 그래서 지금 운영과 관련된 여기 지금 윤정 님하고 알바생들과 함께 작업할 수 있는 것들을 함께 좀 쓰라고요."},
+  {ts:"57:10", speaker:"참석자 3", text:"알바 일단 5월 말까지인데요."},
+  {ts:"57:13", speaker:"참석자 2", text:"한 달, 6월 말까지는 무조건 연장해야 해요."},
+  {ts:"57:37", speaker:"참석자 2", text:"근데 단기 계약이라고 해서 근로라고 해서 계약서 쓰지 않았어요?"},
+  {ts:"57:54", speaker:"참석자 2", text:"오늘 했는 거는 정리해서 다시 한번 슬랙에 주세요. 그래야지 이 혹시라도 잘못 이해하고 있는 거는 수정하고요."},
+  {ts:"58:00", speaker:"참석자 3", text:"제가 오늘 계속 얘기하지, 이따가 제가 보실 수 있는 자료, 생부 등록하는 이런 것들은 다른 사이트를 알려줄게요. 참고하시는 사이트, 거기 바이본이라는 서비스가 있는데 거기가 잔이 있어요. 그거 참고하시면 이런 게 필요할 수 있겠구나를 미리 좀 감 잡을 수 있어요."}
+];
+
+const spColors = ['sp1','sp2','sp3','sp4','sp5','sp6','sp7'];
+const spMap = {};
+
+function getSpeakerClass(name) {
+  if (!spMap[name]) {
+    const idx = Object.keys(spMap).length % spColors.length;
+    spMap[name] = spColors[idx];
+  }
+  return spMap[name];
+}
+
+function tsToSeconds(ts) {
+  const parts = ts.split(':');
+  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+}
+
+function renderScript(data) {
+  const container = document.getElementById('scriptEntries');
+  container.innerHTML = '';
+  data.forEach(entry => {
+    const div = document.createElement('div');
+    div.className = 'script-entry';
+    div.id = 'ts-' + entry.ts.replace(':', '-');
+    div.setAttribute('data-ts', entry.ts);
+    const spClass = getSpeakerClass(entry.speaker);
+    div.innerHTML = `
+      <div class="entry-ts">${entry.ts}</div>
+      <div class="entry-speaker ${spClass}">${entry.speaker}</div>
+      <div class="entry-text">${entry.text}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function filterScript() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = q ? scriptData.filter(e =>
+    e.text.toLowerCase().includes(q) || e.speaker.toLowerCase().includes(q)
+  ) : scriptData;
+  renderScript(filtered);
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function goTo(ts) {
+  // Switch to script tab
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-script').classList.add('active');
+  document.querySelector('[onclick="switchTab(\'script\', this)"]').classList.add('active');
+
+  // Find closest entry
+  const targetSec = tsToSeconds(ts);
+  let closest = scriptData[0];
+  let minDiff = Infinity;
+  scriptData.forEach(e => {
+    const diff = Math.abs(tsToSeconds(e.ts) - targetSec);
+    if (diff < minDiff) { minDiff = diff; closest = e; }
+  });
+
+  const id = 'ts-' + closest.ts.replace(':', '-');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('highlighted');
+      setTimeout(() => el.classList.remove('highlighted'), 2500);
+    }
+  }, 80);
+}
+
+renderScript(scriptData);
+
+// ── GitHub Pages 업로드 ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+const GH_CONFIG = {
+  owner: 'koletter',
+  repo: 'meeting-notes',
+  branch: 'main',
+  fileName: '20260506.html'
+};
+
+async function uploadToGitHub() {
+  const token = prompt('GitHub Personal Access Token을 입력하세요:');
+  if (!token) return;
+
+  const btn = document.getElementById('ghBtn');
+  btn.disabled = true;
+  btn.textContent = '등록 중...';
+
+  try {
+    const htmlContent = document.documentElement.outerHTML.replace(token, '***');
+    const encoded = btoa(unescape(encodeURIComponent(htmlContent)));
+    const filePath = `goodbuilder/${GH_CONFIG.fileName}`;
+    const apiUrl = `https://api.github.com/repos/${GH_CONFIG.owner}/${GH_CONFIG.repo}/contents/${filePath}`;
+
+    // 기존 파일 SHA 확인
+    let sha = null;
+    try {
+      const check = await fetch(apiUrl, {
+        headers: { 'Authorization': `token ${token}` }
+      });
+      if (check.ok) {
+        const existing = await check.json();
+        sha = existing.sha;
+      }
+    } catch(e) {}
+
+    const body = {
+      message: `회의록 추가: 키스톤/브릿지 TF 사업 weekly 2026.05.06`,
+      content: encoded,
+      branch: GH_CONFIG.branch
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (res.ok) {
+      await fetch(`https://api.github.com/repos/${GH_CONFIG.owner}/${GH_CONFIG.repo}/pages`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github+json'
+        },
+        body: JSON.stringify({ source: { branch: GH_CONFIG.branch, path: '/' } })
+      });
+
+      const pageUrl = `https://${GH_CONFIG.owner}.github.io/${GH_CONFIG.repo}/goodbuilder/${GH_CONFIG.fileName}`;
+      showToast('✅ GitHub 등록 완료!', 'success');
+      try { await navigator.clipboard.writeText(pageUrl); } catch(e) {}
+      setTimeout(() => {
+        alert(`✅ 등록 완료!\n\n🔗 ${pageUrl}\n\n(URL이 클립보드에 복사됐어요. 페이지 활성화까지 1~2분 소요될 수 있어요)`);
+        window.open(`https://github.com/${GH_CONFIG.owner}/${GH_CONFIG.repo}`, '_blank');
+      }, 800);
+    } else {
+      const err = await res.json();
+      showToast(`❌ 오류: ${err.message || res.status}`, 'error');
+    }
+  } catch(e) {
+    showToast('❌ 네트워크 오류가 발생했어요', 'error');
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub 등록`;
+  }
+}
+</script>
+
+
+</body></html>
