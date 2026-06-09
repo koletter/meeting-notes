@@ -1,0 +1,437 @@
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>굿빌더 + 브릿지 TF 공유 회의 — 2026.06.09</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3349;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --highlight: rgba(79,142,247,0.18);
+    --highlight-border: rgba(79,142,247,0.6);
+    --text: #e2e6f3;
+    --text-muted: #7880a0;
+    --text-dim: #4a5070;
+    --radius: 10px;
+    --tab-h: 54px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.7; }
+
+  header { padding: 28px 36px 0; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .logo { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
+  .meta { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .dot { color: var(--text-dim); margin: 0 6px; }
+
+  .tabs { display: flex; gap: 2px; }
+  .tab-btn { height: var(--tab-h); padding: 0 24px; border: none; background: transparent; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; letter-spacing: -0.2px; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  .tab-content { display: none; padding: 36px; max-width: 900px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  .section { margin-bottom: 36px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .section-header { padding: 16px 22px; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .section-body { padding: 18px 22px; }
+  .section-body p { color: var(--text); margin-bottom: 10px; }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  .ts { display: inline-flex; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.25); border-radius: 5px; padding: 1px 7px; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s; vertical-align: middle; margin: 0 2px; }
+  .ts:hover { background: rgba(79,142,247,0.22); border-color: rgba(79,142,247,0.5); }
+  .ts::before { content: '▶'; font-size: 8px; opacity: 0.7; }
+
+  .insight-grid { display: flex; flex-direction: column; gap: 14px; }
+  .insight-card { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: var(--radius); padding: 14px 18px; }
+  .insight-title { font-weight: 700; color: var(--text); margin-bottom: 5px; font-size: 13px; }
+  .insight-body { color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+
+  .todo-list { display: flex; flex-direction: column; gap: 10px; }
+  .todo-item { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid #f7a94f; border-radius: var(--radius); padding: 12px 18px; }
+  .todo-text { color: var(--text); font-size: 13px; line-height: 1.65; }
+
+  .script-search { margin-bottom: 20px; position: relative; }
+  .script-search input { width: 100%; padding: 10px 16px 10px 40px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; }
+  .script-search input:focus { border-color: var(--accent); }
+  .script-search .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 14px; }
+
+  .script-entries { display: flex; flex-direction: column; gap: 2px; }
+  .script-entry { display: flex; gap: 14px; padding: 12px 16px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s, border-color 0.15s; scroll-margin-top: 130px; }
+  .script-entry:hover { background: var(--surface); border-color: var(--border); }
+  .script-entry.highlighted { background: var(--highlight); border-color: var(--highlight-border); animation: pulse 0.5s ease; }
+  @keyframes pulse { 0% { background: rgba(79,142,247,0.35); } 100% { background: var(--highlight); } }
+  .entry-ts { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); min-width: 42px; padding-top: 2px; flex-shrink: 0; }
+  .entry-speaker { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 64px; flex-shrink: 0; padding-top: 2px; }
+  .entry-text { color: var(--text); font-size: 13px; line-height: 1.75; }
+
+  .sp1 { color: #4f8ef7; } .sp2 { color: #7c5cfc; } .sp3 { color: #4fd1c5; } .sp4 { color: #f6ad55; }
+  .sp5 { color: #fc8181; } .sp6 { color: #68d391; } .sp7 { color: #b794f4; } .sp8 { color: #f687b3; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .gh-btn { display: flex; align-items: center; gap: 7px; padding: 7px 14px; background: #24292e; border: none; border-radius: 7px; color: #fff; font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s; margin-left: auto; flex-shrink: 0; }
+  .gh-btn:hover { background: #374151; }
+  .gh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .gh-btn svg { width: 14px; height: 14px; }
+
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--text); box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.2s; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+  .toast.success { border-color: #48bb78; color: #48bb78; }
+  .toast.error { border-color: #fc8181; color: #fc8181; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="header-top">
+    <span class="logo">굿빌더 + 브릿지 TF</span>
+    <span class="meta">사업 모델 &amp; 데모 공유</span>
+    <span class="dot">·</span>
+    <span class="meta">2026.06.09 화</span>
+    <span class="dot">·</span>
+    <span class="meta">49분 21초</span>
+    <button class="gh-btn" id="ghBtn" onclick="uploadToGitHub()" disabled="">등록 중...</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary', this)">📋 요약</button>
+    <button class="tab-btn" onclick="switchTab('script', this)">📄 전체 스크립트</button>
+  </div>
+</header>
+
+<!-- ══════════════════ 요약 탭 ══════════════════ -->
+<div class="tab-content active" id="tab-summary">
+
+  <!-- 섹션 1: 핵심 논의 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <span class="section-title">핵심 논의</span>
+    </div>
+    <div class="section-body">
+
+      <p><strong>굿빌더 수익 모델 — 매칭 수수료 8% 구조 공개</strong> <span class="ts" onclick="goTo('02:22')">02:22</span><br>
+      굿빌더의 핵심 BM은 매칭 수수료다. 인력이 매칭될 때 구인사로부터 근로자 임금의 8%를 받는다. 시장 상한선은 10%이나 경쟁력을 위해 8%로 설정했다. 굿빌더 직접 매칭 시 전액 수익, 인력사무소 파트너 경유 시 굿빌더 7% + 파트너 1% 구조다. 파트너가 직접 소개·매칭한 경우에는 굿빌더 3%, 파트너 5%로 배분된다. 향후 파트너가 등록시킨 근로자가 플랫폼 내에서 매칭될 때마다 해당 파트너에게 1% 수수료가 누적되는 꼬리표 구조(RS 모델)다. <span class="ts" onclick="goTo('03:18')">03:18</span></p>
+
+      <p><strong>인력사무소 파트너십 — 경쟁이 아닌 초기 생태계 구축 수단</strong> <span class="ts" onclick="goTo('06:16')">06:16</span><br>
+      오프라인 기반 플레이어들이 한 번에 온라인으로 이동하기 어렵다는 전제 하에, 인력사무소를 파트너로 끌어들이는 전략을 채택했다. 파트너 인력사무소는 회원을 굿빌더에 등록시키면 매칭마다 수수료가 쌓이는 구조라 본업을 유지하면서 추가 수익이 생긴다. 지역별 오더가 들어오면 해당 지역 파트너에게 우선 배분하고, 파트너 공급이 어려울 경우 굿빌더가 중재자 역할을 한다. 전국 지역별 100개씩 1,000개 파트너를 빠르게 모집하는 것이 초기 목표다. <span class="ts" onclick="goTo('24:17')">24:17</span></p>
+
+      <p><strong>1588 대표번호 콜센터 운영 구상</strong> <span class="ts" onclick="goTo('07:51')">07:51</span><br>
+      전국 어디서든 1588 번호 하나로 인력 요청이 가능한 콜센터를 운영할 계획이다. 접수된 오더는 1차 시스템 내 매칭 → 2차 파트너 컨택 순으로 처리하고, 매칭 완료 후 양측에 카카오톡으로 알림을 발송한다. 이 채널은 기업 고객과 개인 회원을 굿빌더 앱으로 유입시키는 트리거 역할도 겸한다. 장기적으로는 전화 수신 시 등록 회원 정보를 자동으로 인식해 담당자 이름까지 뜨는 수준을 목표로 한다. <span class="ts" onclick="goTo('08:37')">08:37</span></p>
+
+      <p><strong>SaaS 상품 — 기업 고객 대상 연 300만 원 패키지</strong> <span class="ts" onclick="goTo('04:18')">04:18</span><br>
+      현장 관리·출력·작업일지·인력 관리 기능을 묶은 SaaS 상품을 연 300만 원(월 약 30만 원) 수준으로 건설사·하청업체에 판매한다. 핵심 명분은 업무 간소화 외에 중대재해처벌법 대응 근거 데이터 확보다. 굿빌더를 쓰면 현장 안전 관련 데이터가 자동으로 쌓이므로 분쟁 발생 시 대응 자료가 된다. 현장 수 제한 없이 사용 가능하게 설계해 하청사의 다현장 보급을 유도한다. 사람인 기업 고객(약 1만 7~8천 개 월 로그인 업체)을 채용 광고 상품과 패키지로 묶어 세일즈하는 방안도 함께 논의됐다. <span class="ts" onclick="goTo('05:18')">05:18</span></p>
+
+      <p><strong>수익 시뮬레이션 — 보수적 가정에서도 연 60~72억, 낙관 시 170억</strong> <span class="ts" onclick="goTo('13:05')">13:05</span><br>
+      건설 근로자 24만 명(일용직) + 96만 명(기능공), 월 평균 근무 20일, 평균 임금 15~20만 원 기준으로 시뮬레이션했다. 시장 침투율 5%, 매칭 이용률 10%의 보수적 가정에서 연간 60~72억, 매칭 이용률 30%·기능공 이용률 3%의 낙관적 가정에서 연간 170억(파트너 수수료 약 10억 차감 후 순이익 월 7.8억) 추정치가 나온다. 현재 목표로 제시된 연 150억 달성을 위해 짜낸 BM이라는 점을 강조했으며, 각 변수가 KPI 값으로 연결된다. <span class="ts" onclick="goTo('15:04')">15:04</span></p>
+
+      <p><strong>개미 인력 방문 결과 — 기대 이하, 노욕 강한 상대</strong> <span class="ts" onclick="goTo('48:27')">48:27</span><br>
+      목요일 천안 방문은 분위기가 좋지 않았다. 상대방이 사람인으로부터 한 몫 챙기겠다는 의도가 강하게 느껴졌고, 65세 이상 고령 경영진과의 협의였다. 젊은 사무소장 위주로 타깃을 재설정해야 한다는 의견이 나왔다.</p>
+
+      <p><strong>브릿지 — 생기부 직접 업로드 불가에 따른 전면 개편, 대화형 AI UI 전환</strong> <span class="ts" onclick="goTo('27:16')">27:16</span><br>
+      생기부를 사용자가 업로드해 컨설팅하는 기능이 법적으로 불가능해졌다(개인정보보호법 297조 1항 추가). 업계 전반이 이미 서비스 종료 또는 변경 준비 중이다. 이에 따라 브릿지는 직접 생기부 업로드 대신 항목별 직접 입력 방식으로 전환하고, 전면 UI를 ChatGPT식 대화형으로 개편했다. 3단 구성(메뉴 | 채팅 | 리포트 패널)으로 재설계되며, 모바일에서는 채팅 중심 반응형 레이아웃으로 대응한다. 온보딩도 대화형으로 진행해 자녀 정보·목표 대학·학교 등을 단계별로 수집한다. <span class="ts" onclick="goTo('32:04')">32:04</span></p>
+
+      <p><strong>브릿지 사장님 보고 완료, 신규 기능 — '선배 어디가' 추가</strong> <span class="ts" onclick="goTo('31:00')">31:00</span><br>
+      사장님 보고에서 대화형 UI 방향은 긍정적인 반응을 얻었다. 추가 요청 사항으로 "자소서를 AI의 기초 참고 자료로 쓰게 하라"는 방향이 나왔다. 신규 기능으로 '선배 어디가'가 추가됐다 — 사람인 데이터 기반으로 출신 고교/목표 대학의 취업 경로를 보여주고, 거기서 목표 대학·기업을 설정할 수 있는 기능이다. 서비스 가격은 경쟁사(바이브온 9.9만 원)보다 높은 연 15~20만 원 선이 논의됐다. <span class="ts" onclick="goTo('39:34')">39:34</span></p>
+
+    </div>
+  </div>
+
+  <!-- 섹션 2: 핵심 인사이트 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <span class="section-title">핵심 인사이트</span>
+    </div>
+    <div class="section-body">
+      <div class="insight-grid">
+
+        <div class="insight-card">
+          <div class="insight-title">깃발 뽑기 레이스 — 먼저 들어온 파트너가 무조건 유리한 구조 <span class="ts" onclick="goTo('24:17')">24:17</span></div>
+          <div class="insight-body">인력사무소 파트너에게 "지금 등록하면 앞으로 이 노동자가 굿빌더 안에서 매칭될 때마다 수수료가 꽂힌다"는 논리는 선점 유인이 강하다. 먼저 등록시켜놓을수록 꼬리표가 더 많이 쌓이므로, 파트너 모집 속도 자체가 미래 수익과 직결된다. 초기 3개월간 파트너 수수료를 높게 설정해 선점 동기를 극대화하는 방안이 논의됐다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-title">세 가지 축 중 하나만 터져도 전체가 돌아간다 <span class="ts" onclick="goTo('21:13')">21:13</span></div>
+          <div class="insight-body">기업 고객 SaaS / 인력사무소 파트너십 / 1588 콜센터 세 채널은 독립적이지 않다. 기업 고객이 터지면 현장이 많아지고 개인 회원 유입이 자연스러워진다. 1588이 활성화되면 기업·개인 모두 회원화 트리거가 된다. 파트너십이 성사되면 초기 DB와 지역 커버리지를 한꺼번에 확보한다. 어느 한 축이라도 먼저 터지면 나머지가 따라오는 플라이휠 구조다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-title">브릿지 유입 트리거가 약해진 만큼, 바이럴 설계가 더 중요해졌다 <span class="ts" onclick="goTo('39:48')">39:48</span></div>
+          <div class="insight-body">기존에는 '생기부 1회 무료 진단'이 유입 훅이었는데, 생기부 기능이 빠지면서 첫 인상이 약해졌다. 대신 박현욱이 제안한 방향처럼, 런칭 전 학원·입시 컨설턴트 세미나를 통해 입소문을 먼저 퍼뜨리는 오프라인 바이럴이 핵심 대안으로 부상했다. 대치동 컨설팅을 경험하기 어려운 지방 학생들에게 포지셔닝하는 것이 차별화 포인트가 될 수 있다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-title">중대재해처벌법이 굿빌더 SaaS 도입의 실질적 명분이 된다 <span class="ts" onclick="goTo('04:18')">04:18</span></div>
+          <div class="insight-body">건설사 입장에서 "편하니까 쓰세요"는 도입 설득력이 약하지만, "사고 났을 때 대응 근거 데이터를 이 앱이 쌓아줍니다"는 완전히 다른 무게감을 갖는다. 중대재해처벌법 강화 이후 현장 관리 데이터에 대한 수요가 커지고 있는 시점에서, 굿빌더가 데이터 저장소 역할을 한다는 명분은 영업 시 강력한 어젠다가 될 수 있다.</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-title">브릿지는 론칭 즉시 매출이 나는 구조 — 하반기 캐시카우 후보 <span class="ts" onclick="goTo('43:48')">43:48</span></div>
+          <div class="insight-body">굿빌더가 생태계를 만들어가는 시간이 필요한 반면, 브릿지는 유료 구독 기반이라 론칭 즉시 매출이 발생한다. 수능 전후 수요 피크 구간이 명확하고, 연간 구독 모델이면 수익 예측도 가능하다. 하반기 인센티브 재원을 브릿지에서 만들고 굿빌더는 생태계 구축에 집중하는 투트랙 운영이 현실적 시나리오로 언급됐다.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 섹션 3: 다음 회의 전 해야 할 일 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <span class="section-title">다음 회의 전 해야 할 일</span>
+    </div>
+    <div class="section-body">
+      <div class="todo-list">
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>굿빌더 BM 사장님 보고 준비</strong> <span class="ts" onclick="goTo('15:14')">15:14</span><br>
+            오늘 공유된 매칭 수수료 구조, 인력사무소 파트너십, 1588 콜센터, SaaS 패키지 BM을 보고 자료로 정리. 수수료 시뮬레이션 파일 포함하여 내일 보고 예정.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>인력사무소 파트너십 소개 자료 제작</strong> <span class="ts" onclick="goTo('16:22')">16:22</span><br>
+            파트너 월 수당 시뮬레이션 포함한 파트너십 소개 자료 제작. "지금 등록하면 먼저 꽂힌다"는 선점 프레이밍을 핵심 메시지로.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>1588 콜센터 운영 셋업 방안 검토</strong> <span class="ts" onclick="goTo('08:37')">08:37</span><br>
+            오더 접수 프로세스, 운영 조직 구성, 시스템 내 1차 매칭 → 파트너 2차 컨택 플로우 설계.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>세일즈 본부와 SaaS 상품 영업 방안 협의</strong> <span class="ts" onclick="goTo('09:11')">09:11</span><br>
+            채용 광고 상품 + 굿빌더 SaaS 패키지 구성 논의. 건설사·하청업체 대상 영업 타깃 선정 및 중대재해처벌법 명분 세일즈 스크립트 준비.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>굿빌더 파트너 수수료 정산 기능 개발 범위 확인</strong> <span class="ts" onclick="goTo('16:22')">16:22</span><br>
+            현재 굿빌더 서비스에 파트너 수수료 정산 기능이 없음. 기존 기능에서 조정해 빠르게 구현 가능한 범위 확인 필요.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>브릿지 대화형 UI 개편 관련 AI 랩 대응 범위 정리</strong> <span class="ts" onclick="goTo('33:45')">33:45</span><br>
+            대화형 전환으로 AI 랩이 커버해야 할 경우의 수 증가. 온보딩 플로우, 생기부 항목별 입력 유도, 성적 컨설팅 등 대응 시나리오 정리.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>브릿지 가격 정책 확정</strong> <span class="ts" onclick="goTo('41:43')">41:43</span><br>
+            경쟁사(바이브온 9.9만 원, 도와줘AI 9.9만 원~) 대비 포지셔닝 검토. 연간 15~20만 원 선에서 초기 프로모션 플랜 포함해 확정.
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="todo-text">
+            <strong>브릿지 런칭 전 바이럴 세미나 기획</strong> <span class="ts" onclick="goTo('40:16')">40:16</span><br>
+            학원·입시 컨설턴트 대상 런칭 전 세미나 계획. 박현욱과 협업해 입시 업계 인플루언서 및 그룹 초대, 바이럴 가능한 콘텐츠 사전 준비.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ 스크립트 탭 ══════════════════ -->
+<div class="tab-content" id="tab-script">
+  <div class="script-search">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="발언 내용 검색..." oninput="filterScript()">
+  </div>
+  <div class="script-entries" id="scriptEntries"><div class="script-entry" id="ts-00-03" data-ts="00:03"><div class="entry-ts">00:03</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">다시 만든 거 저희가 생각하는 빌더 시장 침투 전략이랑 수익 모델 이거는 같이 공유 좀 드릴 거고 아직 사장님 보고 전인 점은 참고해 주시되 내일 정도는 보고드릴 거니까 보고드리고 변경 사항 있으면 다시 말씀드릴게요.</div></div><div class="script-entry" id="ts-00-28" data-ts="00:28"><div class="entry-ts">00:28</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">그리고 이거 끝나고 나면 여기에 대해서 가볍게 논의하고 그다음에 브릿지 지금 AI 에이전트 대화형 기반으로 전체적으로 좀 개편되는 데모 보여드릴 거고 공유하도록 하겠습니다.</div></div><div class="script-entry" id="ts-00-48" data-ts="00:48"><div class="entry-ts">00:48</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">코 필더가 저희가 지금 고민이 되게 많았죠. 이것이 시장에 어떻게 안착시키고 어떻게 수익을 가져갈 거냐 사장님이 저희한테 타깃으로 주셨던 최소 연 150억 이상의 매출을 달성하기 위한 안을 고민을 많이 했고요. 결국 필더는 매칭 수수료를 기반으로 합니다.</div></div><div class="script-entry" id="ts-01-23" data-ts="01:23"><div class="entry-ts">01:23</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">건설 현장에서 매일 이루어지는 현장 관리 기능 — 출력, 작업 일지 편의 기능을 통해 사용자를 끌어들이고, 해당 사용자들 간에 일자리 매칭 수수료를 비즈니스 모델로 구성합니다. 오랜 기간 오프라인 기반으로 움직여온 플레이어들이 있어서 인력 사무소 파트너십을 운영하려고 합니다. 기업 고객 대상으로는 채용 광고 상품과 SaaS 상품을 패키징으로 판매하는 안을 생각하고 있습니다.</div></div><div class="script-entry" id="ts-02-22" data-ts="02:22"><div class="entry-ts">02:22</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">매칭 수수료 8%. 인력 매칭 시 구인사로부터 근로자 임금의 8%를 받습니다. 굿빌더 직접 매칭 시 전액 수익, 파트너 경유 시 굿빌더 7% + 파트너 1%. 파트너가 직접 소개해 매칭된 경우 굿빌더 3%, 파트너 5%입니다.</div></div><div class="script-entry" id="ts-03-18" data-ts="03:18"><div class="entry-ts">03:18</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">파트너 인력사무소에서 등록시킨 근로자에게는 꼬리표가 붙어서, 앞으로 이 사람이 굿빌더 안에서 매칭될 때마다 파트너에게 1%씩 수수료가 쌓이는 구조입니다. RS 모델이라고 보시면 돼요.</div></div><div class="script-entry" id="ts-04-18" data-ts="04:18"><div class="entry-ts">04:18</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">현장 관리·작업 일지·인력 관리 기능들이 현장 워크플로우를 간소화해 줍니다. 이 SaaS 기능을 채용 상품과 연계해 연간 300만 원 수준으로 제공합니다. 중대재해처벌법 때문에 현장 사고 대응 근거 데이터 확보가 중요해졌는데, 굿빌더를 쓰면 관련 데이터가 확보됩니다.</div></div><div class="script-entry" id="ts-05-18" data-ts="05:18"><div class="entry-ts">05:18</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">이걸 썼을 경우에는 현장 수에 대한 제한을 없앨 겁니다. 건설사·하청사가 현장 여러 개를 다 쓸 수 있어야 보급이 될 거라 보고 있어요.</div></div><div class="script-entry" id="ts-06-16" data-ts="06:16"><div class="entry-ts">06:16</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">처음부터 100% 온라인에 의존하지 않고 시장의 현실에 맞춰 빠르게 진입합니다. 인력사무소가 파트너가 되면 회원이 굿빌더를 통해 일자리를 얻을 때마다 수수료가 쌓입니다. 본업을 유지하면서 추가 수익이 생기는 구조라 사무소 입장에서 회원 등록을 유도할 계기가 생기죠.</div></div><div class="script-entry" id="ts-06-59" data-ts="06:59"><div class="entry-ts">06:59</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">1%에서 3%까지 셰어 가능하고, 파트너가 직접 매칭했을 때는 5%까지 줍니다. 지역별로 인재 요청이 있을 때 해당 지역 파트너에게 오더를 뿌립니다. 기업 고객이 들어와 현장이 살아나면 그 현장 인력 소개를 지역 파트너로부터 받는 구조입니다.</div></div><div class="script-entry" id="ts-07-51" data-ts="07:51"><div class="entry-ts">07:51</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">인력사무소들이 하는 역할 — 건강 상태 체크, 1차 면담, 이 사람 괜찮아 여부 검증 — 이런 역할들을 인력 파트너들이 굿빌더 안에서도 할 수 있게 하려 합니다.</div></div><div class="script-entry" id="ts-08-37" data-ts="08:37"><div class="entry-ts">08:37</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">전국 대표번호 1588로 전화하면 콜센터에서 현장명, 인원수 등을 받아 파트너에게 먼저 연락합니다. 파트너에서 없으면 인근 인력사무소를 서칭해 중재합니다. 1차 시스템 내 매칭, 2차 파트너 컨택 순서입니다.</div></div><div class="script-entry" id="ts-09-11" data-ts="09:11"><div class="entry-ts">09:11</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">매칭이 완료되면 카톡으로 양쪽에 알림을 보내 개인 회원은 굿빌더 앱으로, 기업 회원도 굿빌더로 유입시키는 경로로 활용합니다. 사람인에 있는 2만여 개 하도급 업체를 대상으로 세일즈 본부와 함께 빠르게 영업합니다.</div></div><div class="script-entry" id="ts-10-05" data-ts="10:05"><div class="entry-ts">10:05</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">굿빌더에는 기업 고객과 개인 고객이 연결됩니다. 기업은 사람인 기업 고객 영업을 통해, 개인은 전국 인력사무소 파트너십으로 끌어오고 1588 콜센터를 트리거로 씁니다. 매칭과 현장 관리 기능으로 생태계를 선순환 구조로 만들어갑니다.</div></div><div class="script-entry" id="ts-11-08" data-ts="11:08"><div class="entry-ts">11:08</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">건설 근로자 수, 월 평균 근로 일수 데이터 기반으로 시뮬레이션합니다. 일용직·기능공 평균 20일 근무, 평균 임금 15~20만 원, 근로자 수 각각 24만·96만 명 기준. 매칭 수수료 8% 기준으로 굿빌더 직접 8%, 파트너 있는 경우 굿빌더 7%+파트너 1%, 파트너 통해 매칭 시 굿빌더 3%+파트너 5%.</div></div><div class="script-entry" id="ts-12-06" data-ts="12:06"><div class="entry-ts">12:06</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">시장 침투율 5%까지는 파트너 경유 비중이 높고, 10~15%까지 올라가면 굿빌더 직접 매칭 비중이 늘어납니다. 매칭 이용률은 한 달 20일 중 2일 이용 시 10%로 봅니다.</div></div><div class="script-entry" id="ts-13-05" data-ts="13:05"><div class="entry-ts">13:05</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">침투율 3%일 때 월 3억 5천, 5%일 때 월 5억 9천. 연간 10개월 환산 시 60억~72억. 매칭 이용률 30%, 기능공 이용률 3% 낙관 시나리오에서는 월 17억, 연 170억까지 가능합니다.</div></div><div class="script-entry" id="ts-13-55" data-ts="13:55"><div class="entry-ts">13:55</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">170억 중 파트너 수수료 약 10억 빠지면 월 순이익 7.8억. 파트너당 월 수당은 침투율 10% + 이용률 30% 기준 약 200만 원. 이걸 수수료율 올려주면 파트너 수당은 확 올라갑니다.</div></div><div class="script-entry" id="ts-15-04" data-ts="15:04"><div class="entry-ts">15:04</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">각 변수 값들을 바꾸면서 매출을 함께 보고, 합의된 목표가 KPI가 됩니다. 현재 사장님이 말씀하신 150억 달성을 위해 짜낸 현재까지의 BM을 공유드렸습니다.</div></div><div class="script-entry" id="ts-15-14" data-ts="15:14"><div class="entry-ts">15:14</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">운영팀이 이제 콜센터 운영 셋업, 인력사무소 파트너십 소개 자료, 세일즈 본부와 굿빌더 SaaS 세일즈 — 이 3개 활동이 론칭 후 본격적으로 돌아가야 합니다. 파트너 수수료 관련 기능은 아직 서비스에 없는데, 기존 기능을 조금 조정하면 가능할 것 같습니다. 3개월 체험 기간을 두려 합니다.</div></div><div class="script-entry" id="ts-17-35" data-ts="17:35"><div class="entry-ts">17:35</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">혹시 질문 있으면 얘기해 봅시다.</div></div><div class="script-entry" id="ts-17-42" data-ts="17:42"><div class="entry-ts">17:42</div><div class="entry-speaker sp2">참석자 2</div><div class="entry-text">이 모델은 수수료를 어떻게 받아요? 급여 기능이 있는 건가요?</div></div><div class="script-entry" id="ts-17-47" data-ts="17:47"><div class="entry-ts">17:47</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">따로 세금계산서·계산서 청구, 후불 청구입니다.</div></div><div class="script-entry" id="ts-17-52" data-ts="17:52"><div class="entry-ts">17:52</div><div class="entry-speaker sp4">참석자 4</div><div class="entry-text">어차피 굿빌더 안에 근로 계약이나 이런 기능들이 다 들어가니까요.</div></div><div class="script-entry" id="ts-18-05" data-ts="18:05"><div class="entry-ts">18:05</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">돈을 우리가 안 떼니까 개인도 기업도 후불 청구할 수밖에 없어요.</div></div><div class="script-entry" id="ts-18-15" data-ts="18:15"><div class="entry-ts">18:15</div><div class="entry-speaker sp4">참석자 4</div><div class="entry-text">근로 계약에 대한 부분과 공수 데이터가 다 쌓이니까, 계약 기간 내 실제 공수 데이터를 기반으로 비용을 청구하는 형태가 돼야 할 것 같아요.</div></div><div class="script-entry" id="ts-18-44" data-ts="18:44"><div class="entry-ts">18:44</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">파트너 수수료 없이 우리가 다 먹는 경우에는 근로자한테 1% 페이백을 해줘도 됩니다. 인당 월 3~4만 원씩 쌓이는 거라 카드 할인보다 큰 혜택이 될 수 있어요. 핵심은 인력사무소 파트너십 — 수수료 셰어로 끌어들이는 것입니다.</div></div><div class="script-entry" id="ts-19-46" data-ts="19:46"><div class="entry-ts">19:46</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">파트너와 근로자 쪽에 수당이 생기면서 '왜 이걸 써야 되지'라는 허들이 제거됐어요. 사람인 기능공이 인력사무소 통하지 않고 직접 가입하면 우리가 더 유리하고, 그들에게 더 줄 수 있는 구조네요.</div></div><div class="script-entry" id="ts-20-42" data-ts="20:42"><div class="entry-ts">20:42</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">사람인에 있는 유저들을 이용하는 게 이 영역입니다 — 파트너 없는 직접 매칭 영역. 여기를 더 확대할 수 있는 방안은 우리가 준비하겠습니다.</div></div><div class="script-entry" id="ts-21-13" data-ts="21:13"><div class="entry-ts">21:13</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">세 가지 축 중 하나만 터도 돼요. 1588이 몰려들기 시작하면 기업이든 개인이든 회원화 동인이 생기고, 파트너십에서 터져도 되고, 기업 고객에서 터져도 됩니다. 제일 베스트는 기업 고객이 터져서 현장이 많이 등록되면 개인은 알아서 들어오는 거예요.</div></div><div class="script-entry" id="ts-22-16" data-ts="22:16"><div class="entry-ts">22:16</div><div class="entry-speaker sp4">참석자 4</div><div class="entry-text">이 모델이 컨펌나면 관련 비용 정리해서 보고드리고 예산을 받아야 합니다. 1년 차 잘 되면 170억이면 초기 투자가 들어가야죠.</div></div><div class="script-entry" id="ts-22-46" data-ts="22:46"><div class="entry-ts">22:46</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">솔직히 보수적으로 잡아도 해볼 만한 사업이라고 생각해요. 지금 유저 수 7천 명인데 기능공까지 붙이면 생각해볼 수 있어요.</div></div><div class="script-entry" id="ts-23-12" data-ts="23:12"><div class="entry-ts">23:12</div><div class="entry-speaker sp4">참석자 4</div><div class="entry-text">사람인 후불형이 어려운 이유가 트래킹이 안 된다는 거잖아요. 근데 우리는 굿빌더 안에서 근로 계약 체결까지 다 들어가 있으니까 일반 후불형이랑은 다른 상황이에요.</div></div><div class="script-entry" id="ts-23-39" data-ts="23:39"><div class="entry-ts">23:39</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">수수료 청구 기준은 모집 공고 금액이 될 수도 있고 근로계약서 금액이 될 수도 있습니다. 디테일은 이후에 챙기고, 큰 틀에서 말은 된다는 게 지금 중요한 거예요.</div></div><div class="script-entry" id="ts-24-17" data-ts="24:17"><div class="entry-ts">24:17</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">론칭 후 3개월간 파트너 수수료 3% 주겠다 — 그 기간 안에 끌어들이는 건 우리가 하기 나름입니다. 깃발 뽑는 애들이 무조건 돈 번다고 생각해요. 전국 지역별 100개씩 1,000개 파트너를 빨리 모으겠습니다. 먼저 등록해서 올리면 앞으로 수수료가 꽂히는 거니까 빨리 해라는 유인이 강합니다.</div></div><div class="script-entry" id="ts-25-17" data-ts="25:17"><div class="entry-ts">25:17</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">추가 질문 없으면 이걸로 사장님 보고 준비할게요.</div></div><div class="script-entry" id="ts-26-07" data-ts="26:07"><div class="entry-ts">26:07</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">구직자 수수료(3번·4번 상품)는 사장님이 넣으라고 해서 넣은 건데 시뮬레이션 해보면 돈이 얼마 안 돼요. 차라리 1번(매칭 수수료)·2번(SaaS)에 집중하고 생태계 플라이휠을 돌리는 게 낫습니다.</div></div><div class="script-entry" id="ts-27-16" data-ts="27:16"><div class="entry-ts">27:16</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">이전 보고 이후 변동 사항이 있었어요. 사용자가 업로드하는 생기부를 법적으로 활용할 수 없게 됐습니다. 업계에서도 이미 기정사실화해서 종료하거나 서비스 변경을 준비 중이에요. 그래서 생기부 업로드 기반 컨설팅은 기능 제공이 불가합니다.</div></div><div class="script-entry" id="ts-28-20" data-ts="28:20"><div class="entry-ts">28:20</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">기존에는 생기부 올리면 항목 코칭을 리포트로 제공했는데, 이제 대화형 AI UI를 전면에 도입하는 걸로 바뀌었어요. 목표 대학을 입력하면 그에 맞는 생기부 방향을 제시해 주고, 사용자는 생기부 내용을 직접 입력하는 방식으로 전환합니다.</div></div><div class="script-entry" id="ts-29-55" data-ts="29:55"><div class="entry-ts">29:55</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">3단 구성 — 메뉴 영역 / 채팅 영역 / 리포트 패널. 채팅을 통해 기존에 페이지로 나오던 리포트가 패널에 표시됩니다. 성적 컨설팅 받은 결과는 패널에 리포트로 제공되고, 채팅으로 추가 상담을 이어갈 수 있으며, 진로에 반영됩니다.</div></div><div class="script-entry" id="ts-30-49" data-ts="30:49"><div class="entry-ts">30:49</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">라이브러리에서 입력 페이지와 리포트 페이지를 쉽게 찾아갈 수 있습니다. 진로 탐색에는 기존 적성 검사 + 직접 설정에 '선배 어디가' 기능이 추가됐습니다. 사람인 데이터 기반으로 출신 고교 선배들이 어느 대학·기업에 많이 갔는지 보여주고 목표를 설정할 수 있어요.</div></div><div class="script-entry" id="ts-32-04" data-ts="32:04"><div class="entry-ts">32:04</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">큰 스펙 변화: 생기부 직접 업로드 컨설팅이 맞춤형 컨설팅으로 바뀌고, 전체 기능을 대화형 UI에 녹여 제공합니다. 모바일에서는 채팅이 중앙으로 오고, 메뉴가 하단으로 빠지는 반응형 레이아웃입니다.</div></div><div class="script-entry" id="ts-33-45" data-ts="33:45"><div class="entry-ts">33:45</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">대화형이 도입되면서 AI 랩이 모든 경우의 수에 대응해야 합니다. 갑자기 엉뚱한 질문이 올 수도 있고, 성적 컨설팅과 생기부 작성이 섞일 수 있어요. FA·BE는 기존 페이지를 이쪽으로 옮기고 공통화하는 작업들이 있습니다.</div></div><div class="script-entry" id="ts-34-45" data-ts="34:45"><div class="entry-ts">34:45</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">대화형 UI라고 해서 모든 걸 대화로 풀지 않아요. 선택지나 단답형이 필요한 건 버튼으로 받습니다. 예를 들어 성별 같은 건 선택지로, 학교명은 검색으로. 이게 컨셉이 괜찮습니다.</div></div><div class="script-entry" id="ts-35-46" data-ts="35:46"><div class="entry-ts">35:46</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">마지막에 특성 입력까지 완료하면 메인 홈으로 들어갑니다. 홈에서 단축 메뉴나 질문을 통해 들어가고, 결과는 오른쪽 패널에서 열립니다. 이게 전체 콘셉트예요.</div></div><div class="script-entry" id="ts-36-51" data-ts="36:51"><div class="entry-ts">36:51</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">아직 교육부의 명확한 답은 안 나왔어요. 만약 나중에 허용되면 이 스펙에서 추가하면 됩니다. 현재 선에서 출시해도 됩니다.</div></div><div class="script-entry" id="ts-37-19" data-ts="37:19"><div class="entry-ts">37:19</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">개인정보보호법 297조 1항에 아예 추가됐어요. 단호하게 추가됐고, 생기부라는 단어 안 써도 생기부 내용을 채우는 것들도 해당됩니다.</div></div><div class="script-entry" id="ts-37-40" data-ts="37:40"><div class="entry-ts">37:40</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">학교에서 뭐 해야 돼, 수행 평가로 뭘 하면 좋아 — 이런 걸 대화형으로 물어보면 되겠네요.</div></div><div class="script-entry" id="ts-37-56" data-ts="37:56"><div class="entry-ts">37:56</div><div class="entry-speaker sp2">참석자 2</div><div class="entry-text">파일 첨부는 완전히 막아요?</div></div><div class="script-entry" id="ts-38-04" data-ts="38:04"><div class="entry-ts">38:04</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">직접 입력만 가능하게 합니다. 파일 첨부는 막아요.</div></div><div class="script-entry" id="ts-38-06" data-ts="38:06"><div class="entry-ts">38:06</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">초기에는 템플릿에 직접 입력하는 방식을 생각했다가, 대화형으로 바뀌면서 단계별로 AI가 유도해 주는 걸로 바뀌었어요. 그러면서 AI 랩이 많이 힘들어하고 있어요. 반발이 장난 아닙니다.</div></div><div class="script-entry" id="ts-38-53" data-ts="38:53"><div class="entry-ts">38:53</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">저게 고등학교마다도 다를 거 아니에요? 외고, 자사고 같은 경우.</div></div><div class="script-entry" id="ts-38-58" data-ts="38:58"><div class="entry-ts">38:58</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">전국 고등학교 동아리 현황, 개설 학과 등 모든 정보를 지금 DB화 작업 중입니다. 알바생들이 작업하고 있어요. 서울여고에 맞춤형으로 얘기할 수 있는 게 차별화된 기능입니다.</div></div><div class="script-entry" id="ts-39-23" data-ts="39:23"><div class="entry-ts">39:23</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">박현욱 님이 데이터 정제된 거 다시 봐주고 있어요.</div></div><div class="script-entry" id="ts-39-34" data-ts="39:34"><div class="entry-ts">39:34</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">마케팅에서 고려해야 할 건 — 입시 컨설팅을 직접 경험하기 힘든 지방 학생들에게 중요한 서비스가 될 것 같습니다. 그 포인트를 잡아야 해요.</div></div><div class="script-entry" id="ts-39-48" data-ts="39:48"><div class="entry-ts">39:48</div><div class="entry-speaker sp2">참석자 2</div><div class="entry-text">원래 유입 트리거가 생기부 1회 무료 진단이었는데, 그게 애매해진 상황이네요.</div></div><div class="script-entry" id="ts-40-07" data-ts="40:07"><div class="entry-ts">40:07</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">샘플 기반 진로 제안이 있긴 한데 이 정도밖에 없어요.</div></div><div class="script-entry" id="ts-40-16" data-ts="40:16"><div class="entry-ts">40:16</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">박현욱이랑 입시 업계 학원, 컨설턴트들을 런칭 전에 모아서 세미나처럼 리뷰하고 바이럴할 수 있는 것들을 미리 준비해야 합니다. 입소문이 어마어마하대요. 퍼포먼스 마케팅 관점만으로는 안 되고 생태계 안으로 들어가야 하는 영역입니다.</div></div><div class="script-entry" id="ts-41-06" data-ts="41:06"><div class="entry-ts">41:06</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">대치동을 꿈꾸는 지방 학생들이 대치동 못 가니까 — 그 포지셔닝이네요.</div></div><div class="script-entry" id="ts-41-18" data-ts="41:18"><div class="entry-ts">41:18</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">아직 범용 LLM이 시장 정리를 안 했고 국내 버티컬은 없으니까 버티컬로 가는 건 좋다고 봐요. 근데 비용 문제가 있어요. AI 클로드 4.5인데 후들후들하지 않나요.</div></div><div class="script-entry" id="ts-41-43" data-ts="41:43"><div class="entry-ts">41:43</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">단가는 월 15~16만 원 정도 생각하고 있어요. 연간 구독 기준으로요.</div></div><div class="script-entry" id="ts-42-12" data-ts="42:12"><div class="entry-ts">42:12</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">바이브온이 수능 성적 가지고 보여주는 게 9.9만~10만 원 받거든요. 그보다 좀 높은데, 박현욱이랑 얘기해봤을 때 20만 원 언더여야 될 것 같다는 의견이 있었어요.</div></div><div class="script-entry" id="ts-42-29" data-ts="42:29"><div class="entry-ts">42:29</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">연간이에요. 수능 치고 정시 지원할 때, 수시 9월, 6월 모의고사 이후에 수요가 몰리는 구조예요. 중간중간 내신 치거나 모의고사 치면서 계속 입력하고 관리하게 만드는 게 중요합니다.</div></div><div class="script-entry" id="ts-43-48" data-ts="43:48"><div class="entry-ts">43:48</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">연간 15.9만 원이면 경쟁사보다 좀 더 받아도 되겠다. 초기 프로모션은 논의하고, 기본 단가는 20~30만 원에서 사유를 만들면 됩니다. 얘는 론칭되자마자 매출이 일어날 소지가 커요.</div></div><div class="script-entry" id="ts-44-12" data-ts="44:12"><div class="entry-ts">44:12</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">저게 대입 컨설팅만인가요? 고입도요?</div></div><div class="script-entry" id="ts-44-18" data-ts="44:18"><div class="entry-ts">44:18</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">대입 메인이에요. 고등학교 1학년 때부터 쓸 수 있습니다.</div></div><div class="script-entry" id="ts-44-22" data-ts="44:22"><div class="entry-ts">44:22</div><div class="entry-speaker sp2">참석자 2</div><div class="entry-text">도와줘AI라고 CES 나간 유사 서비스가 있는데 연간 9.9만 원이에요.</div></div><div class="script-entry" id="ts-44-44" data-ts="44:44"><div class="entry-ts">44:44</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">GPT 기반이잖아요. 우리는 자체 특화 데이터를 갖고 있으니까 차별화됩니다.</div></div><div class="script-entry" id="ts-44-59" data-ts="44:59"><div class="entry-ts">44:59</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">구조 자체는 기존보다 훨씬 쓰기 편할 것 같아요. 직관적이고.</div></div><div class="script-entry" id="ts-45-06" data-ts="45:06"><div class="entry-ts">45:06</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">사장님 보고는 잘 됐어요. 굉장히 좋아했고 유관 부서와 진행 중입니다. 추가로, 자소서를 AI 기초 참고 자료로 활용하는 구조가 필요합니다 — AI가 답변할 때 자소서를 참고 자료로 쓸 수 있게, 업데이트할 때마다 자소서를 갱신하는 구조요.</div></div><div class="script-entry" id="ts-45-52" data-ts="45:52"><div class="entry-ts">45:52</div><div class="entry-speaker sp2">참석자 2</div><div class="entry-text">메모리가 개별로 되나요?</div></div><div class="script-entry" id="ts-45-57" data-ts="45:57"><div class="entry-ts">45:57</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">자소서는 DB에 저장할 거고요. 메모리 문제는 있긴 해요 — 대화가 계속 쌓일수록.</div></div><div class="script-entry" id="ts-46-06" data-ts="46:06"><div class="entry-ts">46:06</div><div class="entry-speaker sp4">참석자 4</div><div class="entry-text">연간권을 끊으면 상관없겠지만, 월별로 하다가 나중에 다시 결제하면 기존 기록들은 어떻게 할 건지 정책이 필요합니다.</div></div><div class="script-entry" id="ts-46-23" data-ts="46:23"><div class="entry-ts">46:23</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">30일 이후에 날린다고 하면 계속 쓰려면 계속 결제하겠죠. 정책을 정해야 합니다.</div></div><div class="script-entry" id="ts-46-44" data-ts="46:44"><div class="entry-ts">46:44</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">일단 하반기에는 돈 좀 벌어봅시다. 저걸로.</div></div><div class="script-entry" id="ts-46-52" data-ts="46:52"><div class="entry-ts">46:52</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">1588로 해야 될 것 같아.</div></div><div class="script-entry" id="ts-46-59" data-ts="46:59"><div class="entry-ts">46:59</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">1588로 몰릴 가능성이 매우 높아요. 1588로 들어오다가 굿빌더로 넘어오는 걸 운영으로 풀어야 합니다. 처음부터 굿빌더로 온다고 생각하면 안 돼요. 전화 오면 등록 회원이면 이름까지 뜨게끔 기본 탑재해야 합니다.</div></div><div class="script-entry" id="ts-47-32" data-ts="47:32"><div class="entry-ts">47:32</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">아웃바운드는 타겟에게 '굿빌더 이용해 보세요'로 접근하면 뭔데부터 시작하잖아요.</div></div><div class="script-entry" id="ts-47-45" data-ts="47:45"><div class="entry-ts">47:45</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">개인 회원이 쌓이고 나서 1588로 들어오면, 그 오더 자체가 다 돈이에요. 매칭되면 추가 수익 모델을 더 붙여도 되고. 어쨌든 끌어들이는 게 핵심. RS 모델이지 다단계가 아닙니다.</div></div><div class="script-entry" id="ts-48-27" data-ts="48:27"><div class="entry-ts">48:27</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">개미 인력 어떡하지.</div></div><div class="script-entry" id="ts-48-32" data-ts="48:32"><div class="entry-ts">48:32</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">별로였어요.</div></div><div class="script-entry" id="ts-48-37" data-ts="48:37"><div class="entry-ts">48:37</div><div class="entry-speaker sp3">참석자 3</div><div class="entry-text">분위기는 괜찮은데 우리가 내심 짜증 나서 평균 하락한 거죠.</div></div><div class="script-entry" id="ts-48-48" data-ts="48:48"><div class="entry-ts">48:48</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">65세 이상 할아버지들이고 노욕이 있어요. 사람인으로부터 한 몫 챙기겠다는 느낌이 너무 강했어요.</div></div><div class="script-entry" id="ts-48-58" data-ts="48:58"><div class="entry-ts">48:58</div><div class="entry-speaker sp6">참석자 7</div><div class="entry-text">젊은 사무소장들한테 팔아야 할 것 같아요.</div></div><div class="script-entry" id="ts-49-02" data-ts="49:02"><div class="entry-ts">49:02</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">잘 부탁합니다. 각자 역할에 충실하고 이 안으로 준비 좀 합시다. 하반기에 돈 좀 벌어서 인센티브 두둑하게 받고.</div></div><div class="script-entry" id="ts-49-16" data-ts="49:16"><div class="entry-ts">49:16</div><div class="entry-speaker sp5">참석자 5</div><div class="entry-text">건설은 하반기부터 아니죠.</div></div><div class="script-entry" id="ts-49-18" data-ts="49:18"><div class="entry-ts">49:18</div><div class="entry-speaker sp1">참석자 1</div><div class="entry-text">돈은 굿빌더보다 브릿지가 먼저예요.</div></div></div>
+</div>
+
+<script>
+const scriptData = [
+  {ts:"00:03", sp:"참석자 1", tx:"다시 만든 거 저희가 생각하는 빌더 시장 침투 전략이랑 수익 모델 이거는 같이 공유 좀 드릴 거고 아직 사장님 보고 전인 점은 참고해 주시되 내일 정도는 보고드릴 거니까 보고드리고 변경 사항 있으면 다시 말씀드릴게요."},
+  {ts:"00:28", sp:"참석자 1", tx:"그리고 이거 끝나고 나면 여기에 대해서 가볍게 논의하고 그다음에 브릿지 지금 AI 에이전트 대화형 기반으로 전체적으로 좀 개편되는 데모 보여드릴 거고 공유하도록 하겠습니다."},
+  {ts:"00:48", sp:"참석자 1", tx:"코 필더가 저희가 지금 고민이 되게 많았죠. 이것이 시장에 어떻게 안착시키고 어떻게 수익을 가져갈 거냐 사장님이 저희한테 타깃으로 주셨던 최소 연 150억 이상의 매출을 달성하기 위한 안을 고민을 많이 했고요. 결국 필더는 매칭 수수료를 기반으로 합니다."},
+  {ts:"01:23", sp:"참석자 1", tx:"건설 현장에서 매일 이루어지는 현장 관리 기능 — 출력, 작업 일지 편의 기능을 통해 사용자를 끌어들이고, 해당 사용자들 간에 일자리 매칭 수수료를 비즈니스 모델로 구성합니다. 오랜 기간 오프라인 기반으로 움직여온 플레이어들이 있어서 인력 사무소 파트너십을 운영하려고 합니다. 기업 고객 대상으로는 채용 광고 상품과 SaaS 상품을 패키징으로 판매하는 안을 생각하고 있습니다."},
+  {ts:"02:22", sp:"참석자 1", tx:"매칭 수수료 8%. 인력 매칭 시 구인사로부터 근로자 임금의 8%를 받습니다. 굿빌더 직접 매칭 시 전액 수익, 파트너 경유 시 굿빌더 7% + 파트너 1%. 파트너가 직접 소개해 매칭된 경우 굿빌더 3%, 파트너 5%입니다."},
+  {ts:"03:18", sp:"참석자 1", tx:"파트너 인력사무소에서 등록시킨 근로자에게는 꼬리표가 붙어서, 앞으로 이 사람이 굿빌더 안에서 매칭될 때마다 파트너에게 1%씩 수수료가 쌓이는 구조입니다. RS 모델이라고 보시면 돼요."},
+  {ts:"04:18", sp:"참석자 1", tx:"현장 관리·작업 일지·인력 관리 기능들이 현장 워크플로우를 간소화해 줍니다. 이 SaaS 기능을 채용 상품과 연계해 연간 300만 원 수준으로 제공합니다. 중대재해처벌법 때문에 현장 사고 대응 근거 데이터 확보가 중요해졌는데, 굿빌더를 쓰면 관련 데이터가 확보됩니다."},
+  {ts:"05:18", sp:"참석자 1", tx:"이걸 썼을 경우에는 현장 수에 대한 제한을 없앨 겁니다. 건설사·하청사가 현장 여러 개를 다 쓸 수 있어야 보급이 될 거라 보고 있어요."},
+  {ts:"06:16", sp:"참석자 1", tx:"처음부터 100% 온라인에 의존하지 않고 시장의 현실에 맞춰 빠르게 진입합니다. 인력사무소가 파트너가 되면 회원이 굿빌더를 통해 일자리를 얻을 때마다 수수료가 쌓입니다. 본업을 유지하면서 추가 수익이 생기는 구조라 사무소 입장에서 회원 등록을 유도할 계기가 생기죠."},
+  {ts:"06:59", sp:"참석자 1", tx:"1%에서 3%까지 셰어 가능하고, 파트너가 직접 매칭했을 때는 5%까지 줍니다. 지역별로 인재 요청이 있을 때 해당 지역 파트너에게 오더를 뿌립니다. 기업 고객이 들어와 현장이 살아나면 그 현장 인력 소개를 지역 파트너로부터 받는 구조입니다."},
+  {ts:"07:51", sp:"참석자 1", tx:"인력사무소들이 하는 역할 — 건강 상태 체크, 1차 면담, 이 사람 괜찮아 여부 검증 — 이런 역할들을 인력 파트너들이 굿빌더 안에서도 할 수 있게 하려 합니다."},
+  {ts:"08:37", sp:"참석자 1", tx:"전국 대표번호 1588로 전화하면 콜센터에서 현장명, 인원수 등을 받아 파트너에게 먼저 연락합니다. 파트너에서 없으면 인근 인력사무소를 서칭해 중재합니다. 1차 시스템 내 매칭, 2차 파트너 컨택 순서입니다."},
+  {ts:"09:11", sp:"참석자 1", tx:"매칭이 완료되면 카톡으로 양쪽에 알림을 보내 개인 회원은 굿빌더 앱으로, 기업 회원도 굿빌더로 유입시키는 경로로 활용합니다. 사람인에 있는 2만여 개 하도급 업체를 대상으로 세일즈 본부와 함께 빠르게 영업합니다."},
+  {ts:"10:05", sp:"참석자 1", tx:"굿빌더에는 기업 고객과 개인 고객이 연결됩니다. 기업은 사람인 기업 고객 영업을 통해, 개인은 전국 인력사무소 파트너십으로 끌어오고 1588 콜센터를 트리거로 씁니다. 매칭과 현장 관리 기능으로 생태계를 선순환 구조로 만들어갑니다."},
+  {ts:"11:08", sp:"참석자 1", tx:"건설 근로자 수, 월 평균 근로 일수 데이터 기반으로 시뮬레이션합니다. 일용직·기능공 평균 20일 근무, 평균 임금 15~20만 원, 근로자 수 각각 24만·96만 명 기준. 매칭 수수료 8% 기준으로 굿빌더 직접 8%, 파트너 있는 경우 굿빌더 7%+파트너 1%, 파트너 통해 매칭 시 굿빌더 3%+파트너 5%."},
+  {ts:"12:06", sp:"참석자 1", tx:"시장 침투율 5%까지는 파트너 경유 비중이 높고, 10~15%까지 올라가면 굿빌더 직접 매칭 비중이 늘어납니다. 매칭 이용률은 한 달 20일 중 2일 이용 시 10%로 봅니다."},
+  {ts:"13:05", sp:"참석자 1", tx:"침투율 3%일 때 월 3억 5천, 5%일 때 월 5억 9천. 연간 10개월 환산 시 60억~72억. 매칭 이용률 30%, 기능공 이용률 3% 낙관 시나리오에서는 월 17억, 연 170억까지 가능합니다."},
+  {ts:"13:55", sp:"참석자 1", tx:"170억 중 파트너 수수료 약 10억 빠지면 월 순이익 7.8억. 파트너당 월 수당은 침투율 10% + 이용률 30% 기준 약 200만 원. 이걸 수수료율 올려주면 파트너 수당은 확 올라갑니다."},
+  {ts:"15:04", sp:"참석자 1", tx:"각 변수 값들을 바꾸면서 매출을 함께 보고, 합의된 목표가 KPI가 됩니다. 현재 사장님이 말씀하신 150억 달성을 위해 짜낸 현재까지의 BM을 공유드렸습니다."},
+  {ts:"15:14", sp:"참석자 1", tx:"운영팀이 이제 콜센터 운영 셋업, 인력사무소 파트너십 소개 자료, 세일즈 본부와 굿빌더 SaaS 세일즈 — 이 3개 활동이 론칭 후 본격적으로 돌아가야 합니다. 파트너 수수료 관련 기능은 아직 서비스에 없는데, 기존 기능을 조금 조정하면 가능할 것 같습니다. 3개월 체험 기간을 두려 합니다."},
+  {ts:"17:35", sp:"참석자 1", tx:"혹시 질문 있으면 얘기해 봅시다."},
+  {ts:"17:42", sp:"참석자 2", tx:"이 모델은 수수료를 어떻게 받아요? 급여 기능이 있는 건가요?"},
+  {ts:"17:47", sp:"참석자 3", tx:"따로 세금계산서·계산서 청구, 후불 청구입니다."},
+  {ts:"17:52", sp:"참석자 4", tx:"어차피 굿빌더 안에 근로 계약이나 이런 기능들이 다 들어가니까요."},
+  {ts:"18:05", sp:"참석자 3", tx:"돈을 우리가 안 떼니까 개인도 기업도 후불 청구할 수밖에 없어요."},
+  {ts:"18:15", sp:"참석자 4", tx:"근로 계약에 대한 부분과 공수 데이터가 다 쌓이니까, 계약 기간 내 실제 공수 데이터를 기반으로 비용을 청구하는 형태가 돼야 할 것 같아요."},
+  {ts:"18:44", sp:"참석자 1", tx:"파트너 수수료 없이 우리가 다 먹는 경우에는 근로자한테 1% 페이백을 해줘도 됩니다. 인당 월 3~4만 원씩 쌓이는 거라 카드 할인보다 큰 혜택이 될 수 있어요. 핵심은 인력사무소 파트너십 — 수수료 셰어로 끌어들이는 것입니다."},
+  {ts:"19:46", sp:"참석자 5", tx:"파트너와 근로자 쪽에 수당이 생기면서 '왜 이걸 써야 되지'라는 허들이 제거됐어요. 사람인 기능공이 인력사무소 통하지 않고 직접 가입하면 우리가 더 유리하고, 그들에게 더 줄 수 있는 구조네요."},
+  {ts:"20:42", sp:"참석자 1", tx:"사람인에 있는 유저들을 이용하는 게 이 영역입니다 — 파트너 없는 직접 매칭 영역. 여기를 더 확대할 수 있는 방안은 우리가 준비하겠습니다."},
+  {ts:"21:13", sp:"참석자 1", tx:"세 가지 축 중 하나만 터도 돼요. 1588이 몰려들기 시작하면 기업이든 개인이든 회원화 동인이 생기고, 파트너십에서 터져도 되고, 기업 고객에서 터져도 됩니다. 제일 베스트는 기업 고객이 터져서 현장이 많이 등록되면 개인은 알아서 들어오는 거예요."},
+  {ts:"22:16", sp:"참석자 4", tx:"이 모델이 컨펌나면 관련 비용 정리해서 보고드리고 예산을 받아야 합니다. 1년 차 잘 되면 170억이면 초기 투자가 들어가야죠."},
+  {ts:"22:46", sp:"참석자 1", tx:"솔직히 보수적으로 잡아도 해볼 만한 사업이라고 생각해요. 지금 유저 수 7천 명인데 기능공까지 붙이면 생각해볼 수 있어요."},
+  {ts:"23:12", sp:"참석자 4", tx:"사람인 후불형이 어려운 이유가 트래킹이 안 된다는 거잖아요. 근데 우리는 굿빌더 안에서 근로 계약 체결까지 다 들어가 있으니까 일반 후불형이랑은 다른 상황이에요."},
+  {ts:"23:39", sp:"참석자 1", tx:"수수료 청구 기준은 모집 공고 금액이 될 수도 있고 근로계약서 금액이 될 수도 있습니다. 디테일은 이후에 챙기고, 큰 틀에서 말은 된다는 게 지금 중요한 거예요."},
+  {ts:"24:17", sp:"참석자 1", tx:"론칭 후 3개월간 파트너 수수료 3% 주겠다 — 그 기간 안에 끌어들이는 건 우리가 하기 나름입니다. 깃발 뽑는 애들이 무조건 돈 번다고 생각해요. 전국 지역별 100개씩 1,000개 파트너를 빨리 모으겠습니다. 먼저 등록해서 올리면 앞으로 수수료가 꽂히는 거니까 빨리 해라는 유인이 강합니다."},
+  {ts:"25:17", sp:"참석자 1", tx:"추가 질문 없으면 이걸로 사장님 보고 준비할게요."},
+  {ts:"26:07", sp:"참석자 1", tx:"구직자 수수료(3번·4번 상품)는 사장님이 넣으라고 해서 넣은 건데 시뮬레이션 해보면 돈이 얼마 안 돼요. 차라리 1번(매칭 수수료)·2번(SaaS)에 집중하고 생태계 플라이휠을 돌리는 게 낫습니다."},
+  {ts:"27:16", sp:"참석자 3", tx:"이전 보고 이후 변동 사항이 있었어요. 사용자가 업로드하는 생기부를 법적으로 활용할 수 없게 됐습니다. 업계에서도 이미 기정사실화해서 종료하거나 서비스 변경을 준비 중이에요. 그래서 생기부 업로드 기반 컨설팅은 기능 제공이 불가합니다."},
+  {ts:"28:20", sp:"참석자 3", tx:"기존에는 생기부 올리면 항목 코칭을 리포트로 제공했는데, 이제 대화형 AI UI를 전면에 도입하는 걸로 바뀌었어요. 목표 대학을 입력하면 그에 맞는 생기부 방향을 제시해 주고, 사용자는 생기부 내용을 직접 입력하는 방식으로 전환합니다."},
+  {ts:"29:55", sp:"참석자 3", tx:"3단 구성 — 메뉴 영역 / 채팅 영역 / 리포트 패널. 채팅을 통해 기존에 페이지로 나오던 리포트가 패널에 표시됩니다. 성적 컨설팅 받은 결과는 패널에 리포트로 제공되고, 채팅으로 추가 상담을 이어갈 수 있으며, 진로에 반영됩니다."},
+  {ts:"30:49", sp:"참석자 3", tx:"라이브러리에서 입력 페이지와 리포트 페이지를 쉽게 찾아갈 수 있습니다. 진로 탐색에는 기존 적성 검사 + 직접 설정에 '선배 어디가' 기능이 추가됐습니다. 사람인 데이터 기반으로 출신 고교 선배들이 어느 대학·기업에 많이 갔는지 보여주고 목표를 설정할 수 있어요."},
+  {ts:"32:04", sp:"참석자 3", tx:"큰 스펙 변화: 생기부 직접 업로드 컨설팅이 맞춤형 컨설팅으로 바뀌고, 전체 기능을 대화형 UI에 녹여 제공합니다. 모바일에서는 채팅이 중앙으로 오고, 메뉴가 하단으로 빠지는 반응형 레이아웃입니다."},
+  {ts:"33:45", sp:"참석자 3", tx:"대화형이 도입되면서 AI 랩이 모든 경우의 수에 대응해야 합니다. 갑자기 엉뚱한 질문이 올 수도 있고, 성적 컨설팅과 생기부 작성이 섞일 수 있어요. FA·BE는 기존 페이지를 이쪽으로 옮기고 공통화하는 작업들이 있습니다."},
+  {ts:"34:45", sp:"참석자 1", tx:"대화형 UI라고 해서 모든 걸 대화로 풀지 않아요. 선택지나 단답형이 필요한 건 버튼으로 받습니다. 예를 들어 성별 같은 건 선택지로, 학교명은 검색으로. 이게 컨셉이 괜찮습니다."},
+  {ts:"35:46", sp:"참석자 1", tx:"마지막에 특성 입력까지 완료하면 메인 홈으로 들어갑니다. 홈에서 단축 메뉴나 질문을 통해 들어가고, 결과는 오른쪽 패널에서 열립니다. 이게 전체 콘셉트예요."},
+  {ts:"36:51", sp:"참석자 1", tx:"아직 교육부의 명확한 답은 안 나왔어요. 만약 나중에 허용되면 이 스펙에서 추가하면 됩니다. 현재 선에서 출시해도 됩니다."},
+  {ts:"37:19", sp:"참석자 7", tx:"개인정보보호법 297조 1항에 아예 추가됐어요. 단호하게 추가됐고, 생기부라는 단어 안 써도 생기부 내용을 채우는 것들도 해당됩니다."},
+  {ts:"37:40", sp:"참석자 7", tx:"학교에서 뭐 해야 돼, 수행 평가로 뭘 하면 좋아 — 이런 걸 대화형으로 물어보면 되겠네요."},
+  {ts:"37:56", sp:"참석자 2", tx:"파일 첨부는 완전히 막아요?"},
+  {ts:"38:04", sp:"참석자 3", tx:"직접 입력만 가능하게 합니다. 파일 첨부는 막아요."},
+  {ts:"38:06", sp:"참석자 1", tx:"초기에는 템플릿에 직접 입력하는 방식을 생각했다가, 대화형으로 바뀌면서 단계별로 AI가 유도해 주는 걸로 바뀌었어요. 그러면서 AI 랩이 많이 힘들어하고 있어요. 반발이 장난 아닙니다."},
+  {ts:"38:53", sp:"참석자 7", tx:"저게 고등학교마다도 다를 거 아니에요? 외고, 자사고 같은 경우."},
+  {ts:"38:58", sp:"참석자 1", tx:"전국 고등학교 동아리 현황, 개설 학과 등 모든 정보를 지금 DB화 작업 중입니다. 알바생들이 작업하고 있어요. 서울여고에 맞춤형으로 얘기할 수 있는 게 차별화된 기능입니다."},
+  {ts:"39:23", sp:"참석자 3", tx:"박현욱 님이 데이터 정제된 거 다시 봐주고 있어요."},
+  {ts:"39:34", sp:"참석자 1", tx:"마케팅에서 고려해야 할 건 — 입시 컨설팅을 직접 경험하기 힘든 지방 학생들에게 중요한 서비스가 될 것 같습니다. 그 포인트를 잡아야 해요."},
+  {ts:"39:48", sp:"참석자 2", tx:"원래 유입 트리거가 생기부 1회 무료 진단이었는데, 그게 애매해진 상황이네요."},
+  {ts:"40:07", sp:"참석자 3", tx:"샘플 기반 진로 제안이 있긴 한데 이 정도밖에 없어요."},
+  {ts:"40:16", sp:"참석자 1", tx:"박현욱이랑 입시 업계 학원, 컨설턴트들을 런칭 전에 모아서 세미나처럼 리뷰하고 바이럴할 수 있는 것들을 미리 준비해야 합니다. 입소문이 어마어마하대요. 퍼포먼스 마케팅 관점만으로는 안 되고 생태계 안으로 들어가야 하는 영역입니다."},
+  {ts:"41:06", sp:"참석자 7", tx:"대치동을 꿈꾸는 지방 학생들이 대치동 못 가니까 — 그 포지셔닝이네요."},
+  {ts:"41:18", sp:"참석자 5", tx:"아직 범용 LLM이 시장 정리를 안 했고 국내 버티컬은 없으니까 버티컬로 가는 건 좋다고 봐요. 근데 비용 문제가 있어요. AI 클로드 4.5인데 후들후들하지 않나요."},
+  {ts:"41:43", sp:"참석자 1", tx:"단가는 월 15~16만 원 정도 생각하고 있어요. 연간 구독 기준으로요."},
+  {ts:"42:12", sp:"참석자 1", tx:"바이브온이 수능 성적 가지고 보여주는 게 9.9만~10만 원 받거든요. 그보다 좀 높은데, 박현욱이랑 얘기해봤을 때 20만 원 언더여야 될 것 같다는 의견이 있었어요."},
+  {ts:"42:29", sp:"참석자 1", tx:"연간이에요. 수능 치고 정시 지원할 때, 수시 9월, 6월 모의고사 이후에 수요가 몰리는 구조예요. 중간중간 내신 치거나 모의고사 치면서 계속 입력하고 관리하게 만드는 게 중요합니다."},
+  {ts:"43:48", sp:"참석자 1", tx:"연간 15.9만 원이면 경쟁사보다 좀 더 받아도 되겠다. 초기 프로모션은 논의하고, 기본 단가는 20~30만 원에서 사유를 만들면 됩니다. 얘는 론칭되자마자 매출이 일어날 소지가 커요."},
+  {ts:"44:12", sp:"참석자 5", tx:"저게 대입 컨설팅만인가요? 고입도요?"},
+  {ts:"44:18", sp:"참석자 1", tx:"대입 메인이에요. 고등학교 1학년 때부터 쓸 수 있습니다."},
+  {ts:"44:22", sp:"참석자 2", tx:"도와줘AI라고 CES 나간 유사 서비스가 있는데 연간 9.9만 원이에요."},
+  {ts:"44:44", sp:"참석자 1", tx:"GPT 기반이잖아요. 우리는 자체 특화 데이터를 갖고 있으니까 차별화됩니다."},
+  {ts:"44:59", sp:"참석자 7", tx:"구조 자체는 기존보다 훨씬 쓰기 편할 것 같아요. 직관적이고."},
+  {ts:"45:06", sp:"참석자 1", tx:"사장님 보고는 잘 됐어요. 굉장히 좋아했고 유관 부서와 진행 중입니다. 추가로, 자소서를 AI 기초 참고 자료로 활용하는 구조가 필요합니다 — AI가 답변할 때 자소서를 참고 자료로 쓸 수 있게, 업데이트할 때마다 자소서를 갱신하는 구조요."},
+  {ts:"45:52", sp:"참석자 2", tx:"메모리가 개별로 되나요?"},
+  {ts:"45:57", sp:"참석자 3", tx:"자소서는 DB에 저장할 거고요. 메모리 문제는 있긴 해요 — 대화가 계속 쌓일수록."},
+  {ts:"46:06", sp:"참석자 4", tx:"연간권을 끊으면 상관없겠지만, 월별로 하다가 나중에 다시 결제하면 기존 기록들은 어떻게 할 건지 정책이 필요합니다."},
+  {ts:"46:23", sp:"참석자 1", tx:"30일 이후에 날린다고 하면 계속 쓰려면 계속 결제하겠죠. 정책을 정해야 합니다."},
+  {ts:"46:44", sp:"참석자 1", tx:"일단 하반기에는 돈 좀 벌어봅시다. 저걸로."},
+  {ts:"46:52", sp:"참석자 3", tx:"1588로 해야 될 것 같아."},
+  {ts:"46:59", sp:"참석자 1", tx:"1588로 몰릴 가능성이 매우 높아요. 1588로 들어오다가 굿빌더로 넘어오는 걸 운영으로 풀어야 합니다. 처음부터 굿빌더로 온다고 생각하면 안 돼요. 전화 오면 등록 회원이면 이름까지 뜨게끔 기본 탑재해야 합니다."},
+  {ts:"47:32", sp:"참석자 5", tx:"아웃바운드는 타겟에게 '굿빌더 이용해 보세요'로 접근하면 뭔데부터 시작하잖아요."},
+  {ts:"47:45", sp:"참석자 1", tx:"개인 회원이 쌓이고 나서 1588로 들어오면, 그 오더 자체가 다 돈이에요. 매칭되면 추가 수익 모델을 더 붙여도 되고. 어쨌든 끌어들이는 게 핵심. RS 모델이지 다단계가 아닙니다."},
+  {ts:"48:27", sp:"참석자 3", tx:"개미 인력 어떡하지."},
+  {ts:"48:32", sp:"참석자 5", tx:"별로였어요."},
+  {ts:"48:37", sp:"참석자 3", tx:"분위기는 괜찮은데 우리가 내심 짜증 나서 평균 하락한 거죠."},
+  {ts:"48:48", sp:"참석자 1", tx:"65세 이상 할아버지들이고 노욕이 있어요. 사람인으로부터 한 몫 챙기겠다는 느낌이 너무 강했어요."},
+  {ts:"48:58", sp:"참석자 7", tx:"젊은 사무소장들한테 팔아야 할 것 같아요."},
+  {ts:"49:02", sp:"참석자 1", tx:"잘 부탁합니다. 각자 역할에 충실하고 이 안으로 준비 좀 합시다. 하반기에 돈 좀 벌어서 인센티브 두둑하게 받고."},
+  {ts:"49:16", sp:"참석자 5", tx:"건설은 하반기부터 아니죠."},
+  {ts:"49:18", sp:"참석자 1", tx:"돈은 굿빌더보다 브릿지가 먼저예요."}
+];
+
+const spColors = ['sp1','sp2','sp3','sp4','sp5','sp6','sp7','sp8'];
+const spMap = {};
+
+function getSpeakerClass(name) {
+  if (!spMap[name]) { const idx = Object.keys(spMap).length % spColors.length; spMap[name] = spColors[idx]; }
+  return spMap[name];
+}
+function tsToSeconds(ts) {
+  const p = ts.split(':');
+  return p.length === 3 ? +p[0]*3600 + +p[1]*60 + +p[2] : +p[0]*60 + +p[1];
+}
+function renderScript(data) {
+  const c = document.getElementById('scriptEntries'); c.innerHTML = '';
+  data.forEach(e => {
+    const d = document.createElement('div'); d.className = 'script-entry';
+    d.id = 'ts-' + e.ts.replace(/:/g, '-'); d.setAttribute('data-ts', e.ts);
+    d.innerHTML = `<div class="entry-ts">${e.ts}</div><div class="entry-speaker ${getSpeakerClass(e.sp)}">${e.sp}</div><div class="entry-text">${e.tx}</div>`;
+    c.appendChild(d);
+  });
+}
+function filterScript() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderScript(q ? scriptData.filter(e => e.tx.toLowerCase().includes(q) || e.sp.toLowerCase().includes(q)) : scriptData);
+}
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active'); btn.classList.add('active');
+}
+function goTo(ts) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-script').classList.add('active');
+  document.querySelector('[onclick="switchTab(\'script\', this)"]').classList.add('active');
+  renderScript(scriptData);
+  const targetSec = tsToSeconds(ts);
+  let closest = scriptData[0]; let minDiff = Infinity;
+  scriptData.forEach(e => { const d = Math.abs(tsToSeconds(e.ts) - targetSec); if (d < minDiff) { minDiff = d; closest = e; } });
+  const id = 'ts-' + closest.ts.replace(/:/g, '-');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('highlighted'); setTimeout(() => el.classList.remove('highlighted'), 2500); }
+  }, 80);
+}
+renderScript(scriptData);
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+async function uploadToGitHub() {
+  const token = prompt('GitHub Personal Access Token을 입력하세요:');
+  if (!token) return;
+  const btn = document.getElementById('ghBtn'); btn.disabled = true; btn.textContent = '등록 중...';
+  try {
+    const html = document.documentElement.outerHTML;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+    const apiUrl = 'https://api.github.com/repos/koletter/meeting-notes/contents/meeting/20260609.html';
+    let sha = null;
+    try { const c = await fetch(apiUrl, { headers: { Authorization: `token ${token}` } }); if (c.ok) { const x = await c.json(); sha = x.sha; } } catch(e) {}
+    const body = { message: '회의록 추가: 굿빌더+브릿지 TF 2026.06.09', content: encoded, branch: 'main' };
+    if (sha) body.sha = sha;
+    const res = await fetch(apiUrl, { method: 'PUT', headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (res.ok) {
+      const url = 'https://koletter.github.io/meeting-notes/meeting/20260609.html';
+      showToast('✅ GitHub 등록 완료!', 'success');
+      try { await navigator.clipboard.writeText(url); } catch(e) {}
+      setTimeout(() => alert(`✅ 등록 완료!\n\n🔗 ${url}\n\n(URL이 클립보드에 복사됐어요)`), 800);
+    } else { const err = await res.json(); showToast(`❌ 오류: ${err.message || res.status}`, 'error'); }
+  } catch(e) { showToast('❌ 네트워크 오류', 'error'); }
+  finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> GitHub 등록`;
+  }
+}
+</script>
+
+
+</body></html>
